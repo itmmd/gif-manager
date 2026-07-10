@@ -35,6 +35,14 @@ class CoreServiceProvider extends ModuleServiceProvider
     ];
 
     /**
+     * Boot the module services.
+     */
+    public function boot(): void
+    {
+        parent::boot();
+    }
+
+    /**
      * Define module schedules.
      * 
      * @param $schedule
