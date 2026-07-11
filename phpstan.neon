@@ -20,3 +20,6 @@ parameters:
         # view() در ماژول‌های nwidart از نام‌های module::view استفاده می‌کنه
         # که Larastan به‌عنوان view-string معتبر نمی‌شناسه — این false positive است
         - '#Parameter \#1 \$view of function view expects view-string\|null, string given\.#'
+
+        # متدهای HTTP در Pest tests از طریق magic method روی TestCall کار می‌کنن
+        - '#Call to an undefined method Pest\\PendingCalls\\TestCall::(get|post|put|patch|delete|assertStatus|assertSee|assertRedirect)\(\)\.#'
