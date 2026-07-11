@@ -2,6 +2,7 @@
 
 namespace Modules\Core\Http\Livewire;
 
+use Illuminate\View\View;
 use Livewire\Component;
 
 class Ping extends Component
@@ -15,7 +16,7 @@ class Ping extends Component
         $this->clickCount++;
     }
 
-    public function render(): \Illuminate\View\View
+    public function render(): View
     {
         return view('core::livewire.ping');
     }
