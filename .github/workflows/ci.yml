@@ -70,5 +70,5 @@ jobs:
         run: composer analyse
 
       # ── Tests ─────────────────────────────────────────────────────────
-      - name: Run tests (PHPUnit)
-        run: php artisan test --no-coverage
+      - name: Run tests (Pest)
+        run: vendor/bin/pest --no-coverage
