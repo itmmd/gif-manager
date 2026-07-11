@@ -1,0 +1,74 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  ci:
+    name: Lint, Analyse & Test
+    runs-on: ubuntu-latest
+
+    steps:
+      # ── Checkout ──────────────────────────────────────────────────────
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # ── PHP ───────────────────────────────────────────────────────────
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, xml, ctype, json, sqlite3, pdo_sqlite
+          coverage: none
+
+      # ── Composer cache ────────────────────────────────────────────────
+      - name: Cache Composer packages
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: composer-${{ hashFiles('composer.lock') }}
+          restore-keys: composer-
+
+      - name: Install PHP dependencies
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+
+      # ── Node ──────────────────────────────────────────────────────────
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install Node dependencies
+        run: npm ci
+
+      # ── Environment ───────────────────────────────────────────────────
+      - name: Prepare .env
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
+      - name: Create SQLite database
+        run: touch database/database.sqlite
+
+      - name: Run migrations
+        run: php artisan migrate --force
+
+      # ── Frontend build ────────────────────────────────────────────────
+      - name: Build frontend assets (Vite + Tailwind)
+        run: npm run build
+
+      # ── Pint (dry-run) ────────────────────────────────────────────────
+      - name: Check code style (Pint)
+        run: composer format:check
+
+      # ── Larastan ──────────────────────────────────────────────────────
+      - name: Static analysis (Larastan)
+        run: composer analyse
+
+      # ── Tests ─────────────────────────────────────────────────────────
+      - name: Run tests (PHPUnit)
+        run: php artisan test --no-coverage
