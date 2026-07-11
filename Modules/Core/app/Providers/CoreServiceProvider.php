@@ -3,6 +3,8 @@
 namespace Modules\Core\Providers;
 
 use Illuminate\Console\Scheduling\Schedule;
+use Modules\Core\Contracts\MediaStorageInterface;
+use Modules\Core\Services\Storage\LocalMediaStorage;
 use Nwidart\Modules\Support\ModuleServiceProvider;
 
 class CoreServiceProvider extends ModuleServiceProvider
@@ -33,6 +35,24 @@ class CoreServiceProvider extends ModuleServiceProvider
         EventServiceProvider::class,
         RouteServiceProvider::class,
     ];
+
+    /**
+     * Register module-level service bindings.
+     *
+     * برای تغییر از local به S3 کافیه binding رو اینجا عوض کنی:
+     *   $this->app->bind(MediaStorageInterface::class, S3MediaStorage::class);
+     */
+    public function register(): void
+    {
+        parent::register();
+
+        $this->app->bind(
+            MediaStorageInterface::class,
+            fn () => new LocalMediaStorage(
+                diskName: config('filesystems.default', 'local')
+            )
+        );
+    }
 
     /**
      * Boot the module services.
