@@ -1,0 +1,22 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+
+parameters:
+    paths:
+        - app
+        - Modules
+
+    # سطح ۵ — تعادل بین دقت و noise برای مرحله زیرساخت
+    level: 5
+
+    excludePaths:
+        - '*/vendor/*'
+        - '*/storage/*'
+        - '*/bootstrap/cache/*'
+        - '*/resources/*'
+        - '*/database/migrations/*'
+
+    ignoreErrors:
+        # view() در ماژول‌های nwidart از نام‌های module::view استفاده می‌کنه
+        # که Larastan به‌عنوان view-string معتبر نمی‌شناسه — این false positive است
+        - '#Parameter \#1 \$view of function view expects view-string\|null, string given\.#'
