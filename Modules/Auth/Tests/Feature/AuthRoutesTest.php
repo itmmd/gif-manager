@@ -2,6 +2,11 @@
 
 use Illuminate\Routing\Router;
 
+beforeEach(function () {
+    // Disable Vite manifest resolution so tests pass without running `npm run build`.
+    $this->withoutVite();
+});
+
 it('shows login page with status 200', function () {
     $this->get('/login')->assertStatus(200);
 });
