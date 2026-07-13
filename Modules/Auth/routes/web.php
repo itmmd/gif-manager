@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Modules\Auth\Http\Livewire\ForgotPassword;
 use Modules\Auth\Http\Livewire\Login;
@@ -31,3 +32,13 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/home', fn () => redirect()->route('admin.dashboard'))->name('home');
 });
+
+// Gentelella's built-in JS hardcodes "login.html" as the Sign Out destination.
+// This route catches that GET request, logs the user out properly, and
+// redirects to /login — no JavaScript patching needed.
+Route::get('/login.html', function () {
+    Auth::guard('web')->logout();
+    request()->session()->invalidate();
+    request()->session()->regenerateToken();
+    return redirect('/login');
+})->name('gentelella.logout');
