@@ -1,5 +1,6 @@
 {
     "Core": true,
     "Admin": true,
-    "Auth": true
+    "Auth": true,
+    "Landing": true
 }

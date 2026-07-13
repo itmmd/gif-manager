@@ -2,6 +2,4 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Root route (/) is handled by Modules/Landing — see Modules/Landing/routes/web.php
