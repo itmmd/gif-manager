@@ -17,10 +17,7 @@
          hover glow/scale effects, 4–6 GIF-related features.
          Implemented in: Task 24
     ════════════════════════════════════════════════════════════ --}}
-    <section id="features" aria-label="Features" class="relative py-32 overflow-hidden">
-        {{-- Task 24 placeholder --}}
-        <div class="text-center text-slate-500 py-16">Features section — coming in Task 24</div>
-    </section>
+    @include('landing::sections.features')
 
     {{-- ══════════════════════════════════════════════════════════
          SECTION 3: WHY CHOOSE US
