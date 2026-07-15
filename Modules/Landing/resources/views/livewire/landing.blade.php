@@ -1,15 +1,15 @@
 <div>
 
+    {{-- Navbar: fixed glassmorphism header, shared across all sections --}}
+    <x-landing::navbar />
+
     {{-- ══════════════════════════════════════════════════════════
          SECTION 1: HERO
          Full-viewport opening section — product name, tagline,
          CTA buttons, reveal animations, ambient background glow.
          Implemented in: Task 23
     ════════════════════════════════════════════════════════════ --}}
-    <section id="hero" aria-label="Hero" class="relative min-h-screen flex items-center justify-center overflow-hidden">
-        {{-- Task 23 placeholder --}}
-        <div class="text-center text-slate-500 py-32">Hero section — coming in Task 23</div>
-    </section>
+    @include('landing::sections.hero')
 
     {{-- ══════════════════════════════════════════════════════════
          SECTION 2: FEATURES
