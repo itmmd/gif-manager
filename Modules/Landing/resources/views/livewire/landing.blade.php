@@ -41,10 +41,7 @@
          large typography, minimal design.
          Implemented in: Task 27
     ════════════════════════════════════════════════════════════ --}}
-    <section id="statistics" aria-label="Statistics" class="relative py-32 overflow-hidden">
-        {{-- Task 27 placeholder --}}
-        <div class="text-center text-slate-500 py-16">Statistics section — coming in Task 27</div>
-    </section>
+    @include('landing::sections.statistics')
 
     {{-- ══════════════════════════════════════════════════════════
          SECTION 6: TESTIMONIALS
