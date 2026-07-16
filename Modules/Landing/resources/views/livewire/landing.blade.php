@@ -44,26 +44,14 @@
     @include('landing::sections.statistics')
 
     {{-- ══════════════════════════════════════════════════════════
-         SECTION 6: TESTIMONIALS
-         User quote cards, horizontal scroll / carousel,
-         smooth scroll interaction.
-         Implemented in: Task 28
+         SECTION 6: TESTIMONIALS  (Task 28)
     ════════════════════════════════════════════════════════════ --}}
-    <section id="testimonials" aria-label="Testimonials" class="relative py-32 overflow-hidden">
-        {{-- Task 28 placeholder --}}
-        <div class="text-center text-slate-500 py-16">Testimonials section — coming in Task 28</div>
-    </section>
+    @include('landing::sections.testimonials')
 
     {{-- ══════════════════════════════════════════════════════════
-         SECTION 7: FAQ
-         Alpine.js accordion, animated height/opacity,
-         keyboard-accessible.
-         Implemented in: Task 28
+         SECTION 7: FAQ  (Task 28)
     ════════════════════════════════════════════════════════════ --}}
-    <section id="faq" aria-label="Frequently Asked Questions" class="relative py-32 overflow-hidden">
-        {{-- Task 28 placeholder --}}
-        <div class="text-center text-slate-500 py-16">FAQ section — coming in Task 28</div>
-    </section>
+    @include('landing::sections.faq')
 
     {{-- ══════════════════════════════════════════════════════════
          SECTION 8: FINAL CTA
