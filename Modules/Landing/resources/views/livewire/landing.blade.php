@@ -33,10 +33,7 @@
          smooth transition into next section.
          Implemented in: Task 26
     ════════════════════════════════════════════════════════════ --}}
-    <section id="showcase" aria-label="Showcase" class="relative py-32 overflow-hidden">
-        {{-- Task 26 placeholder --}}
-        <div class="text-center text-slate-500 py-16">Showcase section — coming in Task 26</div>
-    </section>
+    @include('landing::sections.showcase')
 
     {{-- ══════════════════════════════════════════════════════════
          SECTION 5: STATISTICS
