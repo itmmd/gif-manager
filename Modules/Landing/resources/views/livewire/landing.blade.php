@@ -54,25 +54,13 @@
     @include('landing::sections.faq')
 
     {{-- ══════════════════════════════════════════════════════════
-         SECTION 8: FINAL CTA
-         Distinct from Hero, ripple-effect button,
-         strong conversion copy.
-         Implemented in: Task 29
+         SECTION 8: FINAL CTA  (Task 29)
     ════════════════════════════════════════════════════════════ --}}
-    <section id="cta" aria-label="Get Started" class="relative py-32 overflow-hidden">
-        {{-- Task 29 placeholder --}}
-        <div class="text-center text-slate-500 py-16">Final CTA section — coming in Task 29</div>
-    </section>
+    @include('landing::sections.cta')
 
     {{-- ══════════════════════════════════════════════════════════
-         SECTION 9: FOOTER
-         Navigation links, login/register links,
-         minimal clean design.
-         Implemented in: Task 29
+         SECTION 9: FOOTER  (Task 29)
     ════════════════════════════════════════════════════════════ --}}
-    <footer id="footer" aria-label="Site footer" class="relative overflow-hidden">
-        {{-- Task 29 placeholder --}}
-        <div class="text-center text-slate-500 py-16">Footer — coming in Task 29</div>
-    </footer>
+    @include('landing::sections.footer')
 
 </div>
