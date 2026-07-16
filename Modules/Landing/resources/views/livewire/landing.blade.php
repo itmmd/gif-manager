@@ -25,10 +25,7 @@
          parallax background layer.
          Implemented in: Task 25
     ════════════════════════════════════════════════════════════ --}}
-    <section id="why-us" aria-label="Why Choose Us" class="relative py-32 overflow-hidden">
-        {{-- Task 25 placeholder --}}
-        <div class="text-center text-slate-500 py-16">Why Choose Us section — coming in Task 25</div>
-    </section>
+    @include('landing::sections.why-us')
 
     {{-- ══════════════════════════════════════════════════════════
          SECTION 4: SHOWCASE
