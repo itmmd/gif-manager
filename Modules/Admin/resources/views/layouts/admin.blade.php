@@ -40,6 +40,28 @@
     {{-- Livewire styles (injected before closing </head>) --}}
     @livewireStyles
 
+    {{-- Mobile touch-target overrides: Gentelella's tb-btn (32px) and
+         sidebar-toggle (34px) are below the 44×44 px WCAG 2.5.5 guideline.
+         We enlarge the interactive hit area on touch devices only, so the
+         visual size stays unchanged on desktop (pointer: fine). --}}
+    <style>
+        @media (pointer: coarse) {
+            /* Topbar icon buttons: grow hit area to 44 px without changing
+               the visible icon size. */
+            .tb-btn,
+            .sidebar-toggle {
+                min-width: 44px;
+                min-height: 44px;
+            }
+
+            /* Avatar button in topbar */
+            .tb-avatar {
+                min-width: 44px;
+                min-height: 44px;
+            }
+        }
+    </style>
+
     {{-- Per-page styles slot (inject via @push / named slot from Livewire components) --}}
     {{ $styles ?? '' }}
 </head>

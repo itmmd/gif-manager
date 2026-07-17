@@ -104,12 +104,13 @@
         </div>
 
         {{-- ════════ RIGHT COLUMN: visual mockup with parallax ════════ --}}
-        {{-- Translates at a faster factor (0.06) to create depth vs. text --}}
+        {{-- Parallax disabled on mobile (<lg): stacked layout + translateY
+             causes visible jitter when scrolling on narrow screens. --}}
         <div
             data-reveal
             data-reveal-delay="2"
             class="relative"
-            :style="`transform: translateY(${$store.scroll.y * 0.06}px)`"
+            :style="window.innerWidth >= 1024 ? `transform: translateY(${$store.scroll.y * 0.06}px)` : ''"
         >
             <div class="glass relative overflow-hidden rounded-3xl p-2 shadow-2xl shadow-violet-500/10">
                 {{-- Faux app window chrome --}}

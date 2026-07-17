@@ -77,10 +77,11 @@
         </div>
 
         {{-- ── Mobile hamburger ──────────────────────────────── --}}
+        {{-- min 44×44 px touch target (WCAG 2.5.5) --}}
         <button
             type="button"
             @click="mobileOpen = !mobileOpen"
-            class="lg:hidden inline-flex h-10 w-10 items-center justify-center rounded-lg text-slate-300 hover:bg-white/5 hover:text-white transition-colors"
+            class="lg:hidden inline-flex h-11 w-11 items-center justify-center rounded-lg text-slate-300 hover:bg-white/5 hover:text-white transition-colors"
             :aria-expanded="mobileOpen"
             aria-label="Toggle menu"
         >
@@ -111,7 +112,8 @@
                 <a
                     href="{{ $link['href'] }}"
                     @click="mobileOpen = false"
-                    class="block rounded-lg px-3 py-2.5 text-base font-medium text-slate-300 hover:bg-white/5 hover:text-white transition-colors"
+                    {{-- min-h-11 = 44px touch target --}}
+                    class="flex min-h-[44px] items-center rounded-lg px-3 text-base font-medium text-slate-300 hover:bg-white/5 hover:text-white transition-colors"
                 >
                     {{ $link['label'] }}
                 </a>
@@ -120,14 +122,14 @@
                 <a
                     href="{{ route('login') }}"
                     @click="mobileOpen = false"
-                    class="rounded-lg px-4 py-2.5 text-center text-sm font-medium text-slate-200 hover:bg-white/5 transition-colors"
+                    class="flex min-h-[44px] items-center justify-center rounded-lg px-4 text-sm font-medium text-slate-200 hover:bg-white/5 transition-colors"
                 >
                     Sign in
                 </a>
                 <a
                     href="{{ route('register') }}"
                     @click="mobileOpen = false"
-                    class="rounded-lg bg-gradient-to-r from-indigo-500 to-violet-500 px-4 py-2.5 text-center text-sm font-semibold text-white shadow-lg shadow-indigo-500/30"
+                    class="flex min-h-[44px] items-center justify-center rounded-lg bg-gradient-to-r from-indigo-500 to-violet-500 px-4 text-sm font-semibold text-white shadow-lg shadow-indigo-500/30"
                 >
                     Get Started
                 </a>

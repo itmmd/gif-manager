@@ -103,6 +103,35 @@
             border: 1px solid var(--landing-border);
         }
 
+        /* Reduce backdrop-filter cost on low-end / small-screen devices.
+           Devices that hint at reduced motion typically have lower GPU budgets
+           too; we keep the border/bg tint so the card still reads as "glass". */
+        @media (prefers-reduced-motion: reduce) {
+            .glass {
+                backdrop-filter: none;
+                -webkit-backdrop-filter: none;
+                background: rgba(255,255,255,0.07);
+            }
+        }
+
+        /* On very small viewports the blur compositor layer can cause scroll
+           jank. Disable blur below 640 px (sm breakpoint) where GPU is
+           most constrained, while keeping the semi-transparent surface. */
+        @media (max-width: 639px) {
+            .glass {
+                backdrop-filter: none;
+                -webkit-backdrop-filter: none;
+                background: rgba(255,255,255,0.07);
+            }
+
+            /* Navbar also uses Tailwind backdrop-blur-xl via :class binding.
+               Override it on mobile to avoid compositor jank. */
+            header[x-data] {
+                backdrop-filter: none !important;
+                -webkit-backdrop-filter: none !important;
+            }
+        }
+
         /* ── Glow utilities ── */
         .glow-primary {
             box-shadow: 0 0 40px var(--landing-glow);

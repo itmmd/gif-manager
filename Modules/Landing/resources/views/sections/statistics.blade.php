@@ -82,7 +82,7 @@
                     @endif
 
                     {{-- Animated number --}}
-                    <div class="text-5xl font-extrabold tracking-tight text-white sm:text-6xl">
+                    <div class="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
                         <span x-text="current < 10 ? current.toFixed(1) : Math.round(current).toLocaleString()"></span><span class="text-gradient">{{ $stat['suffix'] }}</span>
                     </div>
 
