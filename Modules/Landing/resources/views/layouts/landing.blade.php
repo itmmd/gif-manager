@@ -24,7 +24,7 @@
 
     {{-- SEO: Twitter Card --}}
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="{{ $title ?? 'GIF Manager' }}">
+    <meta name="twitter:title" content="{{ $title ?? 'GIF Manager — Organize, Share & Discover GIFs' }}">
     <meta name="twitter:description" content="{{ $description ?? 'The fastest way to upload, organize, and share your GIF collection.' }}">
     <meta name="twitter:image" content="{{ asset('images/og-image.png') }}">
 

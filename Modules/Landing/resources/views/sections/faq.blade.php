@@ -88,7 +88,7 @@
                 <dt>
                     <button
                         type="button"
-                        class="w-full flex items-center justify-between gap-4 px-6 py-5 text-left"
+                        class="w-full flex items-center justify-between gap-4 px-6 py-5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-inset rounded-2xl"
                         @click="open = open === {{ $i }} ? null : {{ $i }}"
                         :aria-expanded="open === {{ $i }} ? 'true' : 'false'"
                         aria-controls="faq-answer-{{ $i }}"

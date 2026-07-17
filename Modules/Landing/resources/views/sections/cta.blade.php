@@ -100,7 +100,7 @@
                     >
                         <a
                             href="{{ route('register') }}"
-                            class="relative inline-flex items-center gap-2.5 text-white font-bold rounded-2xl"
+                            class="relative inline-flex items-center gap-2.5 text-white font-bold rounded-2xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-indigo-400"
                             style="
                                 background: linear-gradient(135deg,#6366f1,#8b5cf6,#06b6d4);
                                 padding: 1rem 2.4rem;
