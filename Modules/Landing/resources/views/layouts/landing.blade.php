@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     {{-- SEO: Primary --}}
@@ -101,6 +101,44 @@
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid var(--landing-border);
+        }
+
+        /* ── Mobile nav panel — intentionally solid, never glass ── */
+        /*
+         * Full-screen overlay that covers the entire viewport on every device:
+         *
+         * • 100dvh   — dynamic viewport height: shrinks/grows with the browser
+         *              chrome (address bar) on iOS Safari & Chrome mobile. This
+         *              prevents the panel being taller than the visible area.
+         * • 100vh    — fallback for browsers that don't support dvh yet
+         *              (Chrome < 108, Safari < 15.4, Firefox < 101).
+         * • safe-area padding — keeps content away from notch (top) and the
+         *              home-indicator bar (bottom) on notch / Dynamic Island
+         *              iPhones and similar Android devices.
+         *              Requires viewport-fit=cover in the <meta> tag (set above).
+         * • overflow-y: auto — makes the link list scrollable when the viewport
+         *              is short (e.g. landscape on iPhone SE / 8).
+         *
+         * The panel is position:fixed so it sits above the page in the stacking
+         * context and is unaffected by the page scroll position.
+         */
+        .nav-mobile-panel {
+            position: fixed;
+            inset: 0;
+            z-index: 40; /* below the navbar header (z-50) so the topbar stays visible */
+            background: #0d0d15;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+
+            /* dvh with vh fallback */
+            height: 100vh;
+            height: 100dvh;
+
+            /* Safe-area insets for notch / Dynamic Island / home-indicator */
+            padding-top: calc(4rem + env(safe-area-inset-top));    /* 4rem = navbar height */
+            padding-bottom: env(safe-area-inset-bottom, 1rem);
+            padding-left: env(safe-area-inset-left, 0px);
+            padding-right: env(safe-area-inset-right, 0px);
         }
 
         /* Reduce backdrop-filter cost on low-end / small-screen devices.

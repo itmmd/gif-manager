@@ -24,13 +24,84 @@
 ])
 
 <header
-    x-data="{ mobileOpen: false }"
+    x-data="{
+        mobileOpen: false,
+        _scrollY: 0,
+
+        /*
+         * iOS Safari scroll-lock bug:
+         * Setting overflow:hidden on <body> alone causes the page to jump to
+         * the top when re-opened. The fix: record scrollY, switch body to
+         * position:fixed with top:-{scrollY}px, then restore on close.
+         */
+        openMenu() {
+            this._scrollY = window.scrollY;
+            document.body.style.overflow   = 'hidden';
+            document.body.style.position   = 'fixed';
+            document.body.style.top        = `-${this._scrollY}px`;
+            document.body.style.width      = '100%';
+            this.mobileOpen = true;
+            // Move focus to first focusable element in panel after transition
+            this.$nextTick(() => {
+                const first = this.$refs.panel.querySelector('a, button');
+                if (first) first.focus();
+            });
+        },
+
+        closeMenu() {
+            this.mobileOpen = false;
+            document.body.style.overflow   = '';
+            document.body.style.position   = '';
+            document.body.style.top        = '';
+            document.body.style.width      = '';
+            window.scrollTo({ top: this._scrollY, behavior: 'instant' });
+            // Return focus to hamburger button
+            this.$nextTick(() => this.$refs.hamburger.focus());
+        },
+
+        toggleMenu() { this.mobileOpen ? this.closeMenu() : this.openMenu(); },
+
+        /*
+         * Focus trap: when the panel is open, Tab/Shift-Tab should cycle only
+         * within the panel. Also handles Escape to close.
+         */
+        handleKeydown(e) {
+            if (!this.mobileOpen) return;
+
+            if (e.key === 'Escape') {
+                e.preventDefault();
+                this.closeMenu();
+                return;
+            }
+
+            if (e.key === 'Tab') {
+                const panel = this.$refs.panel;
+                const focusable = [...panel.querySelectorAll(
+                    'a[href], button, [tabindex]:not([tabindex=\"-1\"])'
+                )].filter(el => !el.disabled);
+
+                if (!focusable.length) return;
+
+                const first = focusable[0];
+                const last  = focusable[focusable.length - 1];
+
+                if (e.shiftKey && document.activeElement === first) {
+                    e.preventDefault();
+                    last.focus();
+                } else if (!e.shiftKey && document.activeElement === last) {
+                    e.preventDefault();
+                    first.focus();
+                }
+            }
+        }
+    }"
     x-cloak
+    @keydown.window="handleKeydown($event)"
     class="fixed inset-x-0 top-0 z-50 transition-all duration-300"
-    {{-- Opaque glass when scrolled down; fully transparent at the very top --}}
     :class="$store.scroll.y > 24
         ? 'bg-[#0a0a0f]/80 backdrop-blur-xl border-b border-white/5 shadow-lg shadow-black/20'
         : 'bg-transparent border-b border-transparent'"
+    role="banner"
 >
     <nav class="mx-auto flex h-16 max-w-7xl items-center justify-between px-6 lg:px-8">
 
@@ -79,11 +150,13 @@
         {{-- ── Mobile hamburger ──────────────────────────────── --}}
         {{-- min 44×44 px touch target (WCAG 2.5.5) --}}
         <button
+            x-ref="hamburger"
             type="button"
-            @click="mobileOpen = !mobileOpen"
+            @click="toggleMenu()"
             class="lg:hidden inline-flex h-11 w-11 items-center justify-center rounded-lg text-slate-300 hover:bg-white/5 hover:text-white transition-colors"
             :aria-expanded="mobileOpen"
-            aria-label="Toggle menu"
+            :aria-controls="mobileOpen ? 'mobile-nav-panel' : undefined"
+            aria-label="Toggle navigation menu"
         >
             {{-- Hamburger ↔ Close icon swap --}}
             <svg x-show="!mobileOpen" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
@@ -95,40 +168,61 @@
         </button>
     </nav>
 
-    {{-- ── Mobile slide-down panel ────────────────────────── --}}
+    {{-- ── Mobile full-screen overlay panel ──────────────── --}}
+    {{--
+        Rendered as a position:fixed full-viewport overlay (see .nav-mobile-panel
+        in landing.blade.php for the layout rules: dvh height, safe-area padding,
+        overflow-y:auto for landscape / short viewports).
+
+        The panel sits at z-40, one layer below the header (z-50), so the
+        navbar's topbar row (logo + hamburger/close) stays on top and is
+        always tappable.
+
+        Focus management:
+          - openMenu()  → moves focus to first link inside x-ref="panel"
+          - closeMenu() → returns focus to x-ref="hamburger"
+          - handleKeydown() → Tab cycles within panel; Escape closes
+    --}}
     <div
+        x-ref="panel"
+        id="mobile-nav-panel"
         x-show="mobileOpen"
         x-cloak
         x-transition:enter="transition ease-out duration-200"
-        x-transition:enter-start="opacity-0 -translate-y-2"
-        x-transition:enter-end="opacity-100 translate-y-0"
+        x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100"
         x-transition:leave="transition ease-in duration-150"
-        x-transition:leave-start="opacity-100 translate-y-0"
-        x-transition:leave-end="opacity-0 -translate-y-2"
-        class="lg:hidden border-t border-white/5 bg-[#0a0a0f]/95 backdrop-blur-xl"
+        x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0"
+        class="nav-mobile-panel lg:hidden"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Navigation menu"
     >
-        <div class="space-y-1 px-6 py-4">
+        <div class="flex flex-col gap-1 px-6 py-6">
+            {{-- ── Nav links ─────────────────────────────── --}}
             @foreach ($links as $link)
                 <a
                     href="{{ $link['href'] }}"
-                    @click="mobileOpen = false"
-                    {{-- min-h-11 = 44px touch target --}}
+                    @click="closeMenu()"
                     class="flex min-h-[44px] items-center rounded-lg px-3 text-base font-medium text-slate-300 hover:bg-white/5 hover:text-white transition-colors"
                 >
                     {{ $link['label'] }}
                 </a>
             @endforeach
-            <div class="flex flex-col gap-3 pt-3 mt-2 border-t border-white/5">
+
+            {{-- ── Auth CTAs ──────────────────────────────── --}}
+            <div class="flex flex-col gap-3 pt-4 mt-4 border-t border-white/10">
                 <a
                     href="{{ route('login') }}"
-                    @click="mobileOpen = false"
-                    class="flex min-h-[44px] items-center justify-center rounded-lg px-4 text-sm font-medium text-slate-200 hover:bg-white/5 transition-colors"
+                    @click="closeMenu()"
+                    class="flex min-h-[44px] items-center justify-center rounded-lg px-4 text-sm font-medium text-slate-200 ring-1 ring-white/10 hover:bg-white/5 transition-colors"
                 >
                     Sign in
                 </a>
                 <a
                     href="{{ route('register') }}"
-                    @click="mobileOpen = false"
+                    @click="closeMenu()"
                     class="flex min-h-[44px] items-center justify-center rounded-lg bg-gradient-to-r from-indigo-500 to-violet-500 px-4 text-sm font-semibold text-white shadow-lg shadow-indigo-500/30"
                 >
                     Get Started
