@@ -32,11 +32,11 @@
     <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
     <link rel="apple-touch-icon" href="{{ asset('images/apple-touch-icon.png') }}">
 
-    {{-- Fonts: system stack only (no external requests) --}}
-    {{-- Inter is loaded from Google Fonts conditionally for landing premium feel --}}
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    {{--
+        Fonts: Inter is self-hosted in public/fonts/inter/.
+        No external CDN requests — works offline, faster, no GDPR cookie banner.
+        @font-face and --font-sans override are defined in resources/css/app.css.
+    --}}
 
     {{-- Tailwind CSS + Alpine.js (main app build) --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -68,6 +68,49 @@
             background-color: var(--landing-bg);
             color: var(--landing-text);
             overflow-x: hidden;
+            /* Inter renders crisper with antialiasing */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /*
+         * Type scale — applied globally for landing sections.
+         *
+         * Large headings (Hero h1, section titles) benefit from:
+         *   - negative letter-spacing: tightens the optically-loose gap
+         *     between characters at large sizes (Inter's default spacing
+         *     is tuned for body text, not 56–80px display use)
+         *   - tight line-height: prevents too much vertical air in
+         *     multi-line headlines
+         *
+         * These are defined as CSS custom properties so individual
+         * sections can reference them without scattering magic numbers.
+         */
+        :root {
+            --type-display-tracking: -0.03em;   /* hero h1, large titles  */
+            --type-heading-tracking: -0.02em;   /* section h2 headings    */
+            --type-display-leading:  1.05;      /* hero h1 line-height    */
+            --type-heading-leading:  1.15;      /* section h2 line-height */
+            --type-body-leading:     1.6;       /* paragraphs             */
+        }
+
+        /* Display heading — Hero h1 */
+        .type-display {
+            letter-spacing: var(--type-display-tracking);
+            line-height:    var(--type-display-leading);
+            font-variation-settings: 'wght' 800;   /* variable font axis */
+        }
+
+        /* Section headings */
+        .type-heading {
+            letter-spacing: var(--type-heading-tracking);
+            line-height:    var(--type-heading-leading);
+            font-variation-settings: 'wght' 700;
+        }
+
+        /* Body / paragraph text */
+        .type-body {
+            line-height: var(--type-body-leading);
         }
 
         /* ── Scroll-triggered base state ── */

@@ -77,7 +77,7 @@
         <h1
             data-reveal
             data-reveal-delay="1"
-            class="max-w-3xl text-5xl font-extrabold leading-[1.05] tracking-tight text-white sm:text-6xl lg:text-7xl"
+            class="type-display max-w-3xl text-5xl font-extrabold text-white sm:text-6xl lg:text-7xl"
         >
             Organize, share &amp; discover
             <span class="text-gradient glow-text-primary">GIFs</span>
@@ -88,7 +88,7 @@
         <p
             data-reveal
             data-reveal-delay="2"
-            class="mt-6 max-w-2xl text-lg leading-relaxed text-slate-400 sm:text-xl"
+            class="type-body mt-6 max-w-2xl text-lg text-slate-400 sm:text-xl"
         >
             The fastest way to upload, tag, and share your GIF collection.
             Smart search, instant categories, and one-click sharing — all in
