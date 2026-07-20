@@ -77,7 +77,7 @@
         <h1
             data-reveal
             data-reveal-delay="1"
-            class="type-display max-w-3xl text-3xl font-extrabold text-white sm:text-5xl lg:text-6xl"
+            class="type-display max-w-3xl text-3xl font-extrabold text-white sm:text-5xl lg:text-5xl"
         >
             Organize, share &amp; discover
             <span class="text-gradient glow-text-primary">GIFs</span>

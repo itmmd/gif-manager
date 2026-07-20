@@ -34,8 +34,10 @@
 
     {{--
         Fonts: Inter is self-hosted in public/fonts/inter/.
-        No external CDN requests — works offline, faster, no GDPR cookie banner.
-        @font-face and --font-sans override are defined in resources/css/app.css.
+        @font-face is declared in this layout's <style> block (not in app.css)
+        to prevent Vite's minifier from removing the space between url() and
+        format() — which causes browsers to silently ignore the font.
+        --font-sans is overridden in app.css @theme to wire Inter into Tailwind.
     --}}
 
     {{-- Tailwind CSS + Alpine.js (main app build) --}}
@@ -43,6 +45,28 @@
 
     {{-- Landing-specific CSS custom properties & dark theme default --}}
     <style>
+        /*
+         * Inter Variable Font — self-hosted, no CDN dependency.
+         *
+         * Declared here (in a <style> tag) rather than in app.css to avoid
+         * Vite's CSS minifier removing the required space between url() and
+         * format() — a known quirk in Tailwind v4's build pipeline that causes
+         * browsers to silently reject the @font-face src declaration.
+         *
+         * font-display: swap  → text stays visible during font load (no FOIT).
+         * font-weight: 100 900 → single variable-font file for all weights.
+         */
+        @font-face {
+            font-family: 'Inter';
+            font-style:  normal;
+            font-weight: 100 900;
+            font-display: swap;
+            src: url('/fonts/inter/inter-latin-variable.woff2') format('woff2-variations');
+            unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC,
+                           U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+                           U+2000-206F, U+2074, U+20AC, U+2122, U+2191,
+                           U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        }
         :root {
             /* Brand gradient palette */
             --landing-primary:   #6366f1;   /* indigo-500  */
