@@ -164,17 +164,41 @@
         </button>
 
         @auth
-        <form method="POST" action="{{ route('logout') }}" style="display:inline">
+        {{--
+            Logout: uses a hidden form + fetch to bypass Gentelella's global
+            document.addEventListener("submit") interceptor in main-v4.js,
+            which calls preventDefault() on every form submit (intended for
+            settings forms) and prevents real navigation from happening.
+
+            We submit programmatically via fetch POST, then redirect on success,
+            so the global listener never sees a native submit event.
+        --}}
+        <form id="logout-form" method="POST" action="{{ route('logout') }}" style="display:none">
             @csrf
-            <button type="submit" class="tb-btn" title="Logout" aria-label="Logout">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
-                     stroke="currentColor" stroke-width="1.5">
-                    <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/>
-                    <polyline points="16 17 21 12 16 7"/>
-                    <line x1="21" y1="12" x2="9" y2="12"/>
-                </svg>
-            </button>
         </form>
+        <button
+            type="button"
+            class="tb-btn"
+            title="Logout"
+            aria-label="Logout"
+            onclick="
+                fetch('{{ route('logout') }}', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content,
+                        'Accept': 'application/json'
+                    }
+                }).then(() => { window.location.href = '{{ route('login') }}'; })
+                  .catch(() => { document.getElementById('logout-form').submit(); });
+            "
+        >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="1.5">
+                <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/>
+                <polyline points="16 17 21 12 16 7"/>
+                <line x1="21" y1="12" x2="9" y2="12"/>
+            </svg>
+        </button>
         <button class="tb-avatar" type="button" aria-label="Account menu">
             {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
         </button>
