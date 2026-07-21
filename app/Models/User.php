@@ -29,4 +29,16 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /**
+     * Determine whether this user has the admin role.
+     *
+     * Single source of truth for role checks — all modules (Landing navbar,
+     * Auth middleware, Admin guards) call this method instead of comparing
+     * the role string directly, so the check is easy to extend later.
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
 }

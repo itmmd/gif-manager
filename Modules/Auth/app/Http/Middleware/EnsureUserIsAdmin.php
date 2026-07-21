@@ -16,7 +16,7 @@ class EnsureUserIsAdmin
         }
 
         // Logged in but not admin → 403
-        if (auth()->user()->role !== 'admin') {
+        if (! auth()->user()->isAdmin()) {
             abort(403, 'Access denied. Admin privileges required.');
         }
 

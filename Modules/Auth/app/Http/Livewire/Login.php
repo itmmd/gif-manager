@@ -48,7 +48,11 @@ class Login extends Component
         RateLimiter::clear('login:'.$throttleKey);
         session()->regenerate();
 
-        $this->redirect(config('fortify.home', '/home'), navigate: false);
+        // Full-page redirect back to the Landing page after login.
+        // navigate: false ensures a hard browser reload so the new session
+        // state (auth cookie) is picked up by every component on the page —
+        // including the navbar which reads auth()->check() server-side.
+        $this->redirect(route('landing'), navigate: false);
     }
 
     public function render(): View

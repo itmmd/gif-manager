@@ -31,6 +31,15 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/home', fn () => redirect()->route('admin.dashboard'))->name('home');
+
+    // Logout: POST to preserve CSRF protection, then redirect to landing.
+    Route::post('/logout', function () {
+        Auth::guard('web')->logout();
+        request()->session()->invalidate();
+        request()->session()->regenerateToken();
+
+        return redirect()->route('landing');
+    })->name('logout');
 });
 
 // Gentelella's built-in JS hardcodes "login.html" as the Sign Out destination.

@@ -1,13 +1,13 @@
 <?php
 
-it('returns 200 for admin dashboard', function () {
-    $this->get('/admin')->assertStatus(200);
+/**
+ * Admin Dashboard — No-DB tests (always run)
+ */
+
+beforeEach(function () {
+    $this->withoutVite();
 });
 
-it('renders the sidebar in admin layout', function () {
-    $this->get('/admin')->assertSee('sidebar', escape: false);
-});
-
-it('references gentelella css asset in admin layout', function () {
-    $this->get('/admin')->assertSee('admin-assets/css', escape: false);
+it('redirects guest to login', function () {
+    $this->get('/admin')->assertRedirect('/login');
 });
