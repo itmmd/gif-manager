@@ -3,7 +3,9 @@
 namespace Modules\Core\Providers;
 
 use Illuminate\Console\Scheduling\Schedule;
+use Modules\Core\Contracts\GifShowcaseInterface;
 use Modules\Core\Contracts\MediaStorageInterface;
+use Modules\Core\Services\GifShowcaseService;
 use Modules\Core\Services\Storage\LocalMediaStorage;
 use Nwidart\Modules\Support\ModuleServiceProvider;
 
@@ -51,6 +53,11 @@ class CoreServiceProvider extends ModuleServiceProvider
             fn () => new LocalMediaStorage(
                 diskName: config('filesystems.default', 'local')
             )
+        );
+
+        $this->app->bind(
+            GifShowcaseInterface::class,
+            GifShowcaseService::class
         );
     }
 

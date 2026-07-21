@@ -33,7 +33,7 @@
          smooth transition into next section.
          Implemented in: Task 26
     ════════════════════════════════════════════════════════════ --}}
-    @include('landing::sections.showcase')
+    @include('landing::sections.showcase', ['showcaseGifs' => $showcaseGifs])
 
     {{-- ══════════════════════════════════════════════════════════
          SECTION 5: STATISTICS

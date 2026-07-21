@@ -20,7 +20,6 @@
         ['href' => '#showcase',    'label' => 'Showcase'],
         ['href' => '#statistics',  'label' => 'Stats'],
         ['href' => '#faq',         'label' => 'FAQ'],
-        ['href' => '/gifs',        'label' => 'Gallery'],
     ],
 ])
 
@@ -108,6 +107,12 @@ document.addEventListener('alpine:init', () => {
                     {{ $link['label'] }}
                 </a>
             @endforeach
+            <a
+                href="{{ route('gifs.index') }}"
+                class="relative rounded-lg px-4 py-2 text-sm font-medium text-slate-300 transition-colors duration-200 hover:text-white"
+            >
+                Gallery
+            </a>
         </div>
 
         {{-- ── Desktop auth area ─────────────────────────────── --}}
@@ -162,7 +167,7 @@ document.addEventListener('alpine:init', () => {
                         @endif
 
                         <a
-                            href="#"
+                            href="{{ route('profile') }}"
                             class="flex items-center gap-2.5 px-4 py-2.5 text-sm text-slate-300 transition-colors hover:bg-white/5 hover:text-white"
                             role="menuitem"
                         >
@@ -254,6 +259,13 @@ document.addEventListener('alpine:init', () => {
                     {{ $link['label'] }}
                 </a>
             @endforeach
+            <a
+                href="{{ route('gifs.index') }}"
+                @click="closeMenu()"
+                class="flex min-h-[44px] items-center rounded-lg px-3 text-base font-medium text-slate-300 hover:bg-white/5 hover:text-white transition-colors"
+            >
+                Gallery
+            </a>
 
             {{-- Auth section --}}
             <div class="flex flex-col gap-2 pt-4 mt-4 border-t border-white/10">
@@ -284,7 +296,7 @@ document.addEventListener('alpine:init', () => {
                     @endif
 
                     <a
-                        href="#"
+                        href="{{ route('profile') }}"
                         @click="closeMenu()"
                         class="flex min-h-[44px] items-center gap-2.5 rounded-lg px-3 text-sm font-medium text-slate-300 hover:bg-white/5 hover:text-white transition-colors"
                     >
@@ -303,7 +315,7 @@ document.addEventListener('alpine:init', () => {
                             <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
                             </svg>
-                            خروج
+                            Sign out
                         </button>
                     </form>
 

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Modules\Auth\Http\Livewire\ForgotPassword;
 use Modules\Auth\Http\Livewire\Login;
+use Modules\Auth\Http\Livewire\Profile;
 use Modules\Auth\Http\Livewire\Register;
 use Modules\Auth\Http\Livewire\ResetPassword;
 
@@ -31,6 +32,9 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/home', fn () => redirect()->route('admin.dashboard'))->name('home');
+
+    // Profile — available to every authenticated user (not admin-only).
+    Route::get('/profile', Profile::class)->name('profile');
 
     // Logout: POST to preserve CSRF protection, then redirect to landing.
     Route::post('/logout', function () {
