@@ -53,23 +53,23 @@
             </div>
 
         @else
-            {{-- Masonry-style responsive grid --}}
+            {{-- Uniform grid — same aspect-ratio and card style as Landing Showcase --}}
             <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6"
                  wire:loading.class="opacity-50">
 
                 @foreach ($gifs as $gif)
                     <a
                         href="{{ route('gifs.show', $gif) }}"
-                        class="group relative block overflow-hidden rounded-xl border border-white/8 bg-white/3 transition-all duration-200 hover:-translate-y-0.5 hover:border-indigo-500/40 hover:shadow-xl hover:shadow-indigo-500/10"
+                        class="group relative block overflow-hidden rounded-xl border border-white/8 bg-slate-800/60 transition-all duration-200 hover:-translate-y-0.5 hover:border-indigo-500/40 hover:shadow-xl hover:shadow-indigo-500/10"
                         aria-label="{{ e($gif->title) }}"
                     >
-                        {{-- Fixed aspect-ratio container — prevents giant single items --}}
-                        <div class="relative aspect-square overflow-hidden bg-slate-800/60">
+                        {{-- Fixed 1:1 container — object-cover crops to fill, no stretching --}}
+                        <div class="relative aspect-square overflow-hidden">
                             @if ($gif->mime_type === 'video/mp4')
                                 <video
                                     src="{{ $gif->url }}"
                                     muted autoplay loop playsinline
-                                    class="absolute inset-0 h-full w-full object-cover"
+                                    class="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                                     aria-label="{{ e($gif->title) }}"
                                 ></video>
                             @else
