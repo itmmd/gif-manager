@@ -93,6 +93,29 @@
                 </svg>
                 <span class="nav-text">Dashboard</span>
             </a>
+
+            {{--
+                GIF Library link — guarded with Route::has() so that if the
+                Gif module is disabled or removed, the sidebar simply hides
+                this item instead of throwing a RouteNotFoundException.
+            --}}
+            @if (Route::has('admin.gifs.index'))
+                <a class="nav-link {{ request()->routeIs('admin.gifs.*') ? 'active' : '' }}"
+                   href="{{ route('admin.gifs.index') }}">
+                    {{--
+                        Icon: film-strip with play triangle — universally
+                        understood as "animated / video / GIF content".
+                        Stroke style matches the Dashboard icon (1.5px, currentColor).
+                    --}}
+                    <svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                        <rect x="2" y="4" width="20" height="16" rx="2"/>
+                        <path d="M8 4v16M16 4v16"/>
+                        <path d="M2 9h4M18 9h4M2 15h4M18 15h4"/>
+                    </svg>
+                    <span class="nav-text">GIFs</span>
+                </a>
+            @endif
         </div>
 
         {{-- Additional nav items injected by other modules via the $sidebar slot --}}

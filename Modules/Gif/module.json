@@ -1,0 +1,11 @@
+{
+    "name": "Gif",
+    "alias": "gif",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Gif\\Providers\\GifServiceProvider"
+    ],
+    "files": []
+}

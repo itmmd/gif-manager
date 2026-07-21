@@ -2,5 +2,6 @@
     "Core": true,
     "Admin": true,
     "Auth": true,
-    "Landing": true
+    "Landing": true,
+    "Gif": true
 }

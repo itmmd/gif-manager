@@ -19,6 +19,7 @@
         ['href' => '#showcase',    'label' => 'Showcase'],
         ['href' => '#statistics',  'label' => 'Stats'],
         ['href' => '#faq',         'label' => 'FAQ'],
+        ['href' => '/gifs',        'label' => 'Gallery'],
     ],
 ])
 

@@ -1,0 +1,30 @@
+{
+    "name": "nwidart/gif",
+    "description": "",
+    "authors": [
+        {
+            "name": "Nicolas Widart",
+            "email": "n.widart@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Gif\\": "app/",
+            "Modules\\Gif\\Database\\Factories\\": "database/factories/",
+            "Modules\\Gif\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\Gif\\Tests\\": "tests/"
+        }
+    }
+}
