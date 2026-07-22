@@ -73,39 +73,16 @@
         <div class="mx-auto mt-16 max-w-6xl grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
 
             @if ($hasRealGifs)
-                {{-- Real GIFs from the database --}}
+                {{-- Real GIFs — shared gif-card component (same as /gifs gallery) --}}
                 @foreach ($showcaseGifs as $i => $gif)
-                    <a
-                        href="{{ $gif->show_url }}"
-                        data-reveal
-                        data-reveal-delay="{{ ($i % 4) + 1 }}"
-                        class="group relative block overflow-hidden rounded-2xl border border-white/8 bg-slate-800/60 transition-all duration-200 hover:-translate-y-0.5 hover:border-indigo-500/40 hover:shadow-xl hover:shadow-indigo-500/15"
-                        aria-label="{{ e($gif->title) }}"
-                    >
-                        {{-- Fixed 1:1 container --}}
-                        <div class="relative aspect-square overflow-hidden">
-                            @if ($gif->mime_type === 'video/mp4')
-                                <video
-                                    src="{{ $gif->url }}"
-                                    muted autoplay loop playsinline
-                                    class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.05]"
-                                    aria-label="{{ e($gif->title) }}"
-                                ></video>
-                            @else
-                                <img
-                                    src="{{ $gif->url }}"
-                                    alt="{{ e($gif->title) }}"
-                                    loading="lazy"
-                                    class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.05]"
-                                >
-                            @endif
-
-                            {{-- Hover overlay --}}
-                            <div class="absolute inset-x-0 bottom-0 translate-y-full bg-gradient-to-t from-black/80 via-black/40 to-transparent p-3 transition-transform duration-200 group-hover:translate-y-0">
-                                <p class="truncate text-xs font-semibold text-white">{{ $gif->title }}</p>
-                            </div>
-                        </div>
-                    </a>
+                    <x-gif::gif-card
+                        :href="$gif->show_url"
+                        :url="$gif->url"
+                        :title="$gif->title"
+                        :mimeType="$gif->mime_type"
+                        :reveal="true"
+                        :delay="($i % 4) + 1"
+                    />
                 @endforeach
 
             @else

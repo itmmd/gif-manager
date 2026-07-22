@@ -100,16 +100,12 @@
                 <h2 class="mb-6 text-lg font-bold text-white">More GIFs</h2>
                 <div class="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-8">
                     @foreach ($related as $item)
-                        <a href="{{ route('gifs.show', $item) }}"
-                           class="group block overflow-hidden rounded-xl border border-white/5 hover:border-indigo-500/40 transition">
-                            @if ($item->mime_type === 'video/mp4')
-                                <video src="{{ $item->url }}" muted autoplay loop playsinline
-                                       class="aspect-square w-full object-cover"></video>
-                            @else
-                                <img src="{{ $item->url }}" alt="{{ e($item->title) }}"
-                                     loading="lazy" class="aspect-square w-full object-cover">
-                            @endif
-                        </a>
+                        <x-gif::gif-card
+                            :href="route('gifs.show', $item)"
+                            :url="$item->url"
+                            :title="$item->title"
+                            :mimeType="$item->mime_type"
+                        />
                     @endforeach
                 </div>
             </section>

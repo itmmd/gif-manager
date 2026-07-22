@@ -3,7 +3,6 @@
 namespace Modules\Gif\Http\Livewire;
 
 use Livewire\Attributes\Layout;
-use Livewire\Attributes\Title;
 use Livewire\Component;
 use Modules\Gif\Models\Gif;
 
@@ -12,10 +11,16 @@ class PublicShow extends Component
 {
     public Gif $gif;
 
-    #[Title]
+    /**
+     * Dynamic page title — overrides Livewire's default title resolution.
+     *
+     * #[Title] attribute requires a compile-time string and cannot reference
+     * $this->gif. Using the title() method override instead, which Livewire 4
+     * calls at render time after mount() has populated $this->gif.
+     */
     public function title(): string
     {
-        return $this->gif->title . ' — GIF Gallery';
+        return ($this->gif->title ?? 'View GIF') . ' — GIF Gallery';
     }
 
     public function render()

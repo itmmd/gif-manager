@@ -14,8 +14,8 @@ use Modules\Gif\Http\Livewire\UploadGif;
 Route::prefix('gifs')
     ->name('gifs.')
     ->group(function () {
-        Route::get('/',       PublicGallery::class)->name('index');
-        Route::get('/{gif}',  PublicShow::class)->name('show');
+        Route::get('/',            PublicGallery::class)->name('index');
+        Route::get('/{gif:slug}',  PublicShow::class)->name('show');
     });
 
 /*

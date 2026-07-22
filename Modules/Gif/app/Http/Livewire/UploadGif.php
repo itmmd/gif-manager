@@ -16,7 +16,7 @@ class UploadGif extends Component
 {
     use WithFileUploads;
 
-    #[Validate('required|string|max:255')]
+    #[Validate('required|string|min:2|max:255')]
     public string $title = '';
 
     /**

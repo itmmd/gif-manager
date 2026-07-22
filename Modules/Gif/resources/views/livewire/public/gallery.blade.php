@@ -53,41 +53,18 @@
             </div>
 
         @else
-            {{-- Uniform grid — same aspect-ratio and card style as Landing Showcase --}}
+            {{-- Uniform grid — gif-card component ensures consistent sizing everywhere --}}
             <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6"
                  wire:loading.class="opacity-50">
 
                 @foreach ($gifs as $gif)
-                    <a
-                        href="{{ route('gifs.show', $gif) }}"
-                        class="group relative block overflow-hidden rounded-xl border border-white/8 bg-slate-800/60 transition-all duration-200 hover:-translate-y-0.5 hover:border-indigo-500/40 hover:shadow-xl hover:shadow-indigo-500/10"
-                        aria-label="{{ e($gif->title) }}"
-                    >
-                        {{-- Fixed 1:1 container — object-cover crops to fill, no stretching --}}
-                        <div class="relative aspect-square overflow-hidden">
-                            @if ($gif->mime_type === 'video/mp4')
-                                <video
-                                    src="{{ $gif->url }}"
-                                    muted autoplay loop playsinline
-                                    class="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                                    aria-label="{{ e($gif->title) }}"
-                                ></video>
-                            @else
-                                <img
-                                    src="{{ $gif->url }}"
-                                    alt="{{ e($gif->title) }}"
-                                    loading="lazy"
-                                    class="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                                >
-                            @endif
-
-                            {{-- Hover overlay with title --}}
-                            <div class="absolute inset-x-0 bottom-0 translate-y-full bg-gradient-to-t from-black/80 via-black/40 to-transparent p-3 transition-transform duration-200 group-hover:translate-y-0">
-                                <p class="truncate text-xs font-medium text-white">{{ $gif->title }}</p>
-                                <p class="mt-0.5 text-[10px] text-slate-400">{{ $gif->formatted_size }}</p>
-                            </div>
-                        </div>
-                    </a>
+                    <x-gif::gif-card
+                        :href="route('gifs.show', $gif)"
+                        :url="$gif->url"
+                        :title="$gif->title"
+                        :mimeType="$gif->mime_type"
+                        :size="$gif->formatted_size"
+                    />
                 @endforeach
 
             </div>
