@@ -3,5 +3,6 @@
     "Admin": true,
     "Auth": true,
     "Landing": true,
-    "Gif": true
+    "Gif": true,
+    "Ai": true
 }

@@ -23,6 +23,34 @@
                 </div>
                 <div class="card-body">
 
+                    {{-- ── Duplicate warning banner ── --}}
+                    @if ($duplicateWarning)
+                        <div class="alert alert-warning" role="alert" aria-live="assertive" style="margin-bottom:20px;">
+                            <svg class="alert-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+                                <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+                            </svg>
+                            <div class="alert-body">
+                                <strong>Possible duplicate detected.</strong><br>
+                                This file looks very similar to <em>{{ e($duplicateWarning) }}</em>.
+                                <div style="margin-top:10px; display:flex; gap:8px;">
+                                    <button
+                                        wire:click="confirmDuplicate"
+                                        class="btn btn-warning"
+                                        style="height:32px; padding:0 14px; font-size:13px;"
+                                        aria-label="Upload anyway"
+                                    >Upload anyway</button>
+                                    <button
+                                        wire:click="$set('file', null)"
+                                        class="btn btn-outline"
+                                        style="height:32px; padding:0 14px; font-size:13px;"
+                                        aria-label="Choose different file"
+                                    >Choose different file</button>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+
                     {{-- ── Success banner ── --}}
                     @if ($uploaded)
                         <div class="alert alert-success" role="alert" aria-live="polite">

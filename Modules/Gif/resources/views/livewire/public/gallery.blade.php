@@ -29,6 +29,21 @@
                         aria-label="Search GIFs"
                     >
                 </div>
+
+                {{-- GIF Genie CTA — only rendered when Ai module is active --}}
+                @if ($genieAvailable)
+                    <div class="mt-3 text-center">
+                        <a href="{{ route('gifs.genie') }}@if($search)?genie={{ urlencode($search) }}@endif"
+                           class="inline-flex items-center gap-2 rounded-full bg-violet-600/20 px-4 py-1.5 text-xs font-medium text-violet-300 ring-1 ring-violet-500/30 transition hover:bg-violet-600/30 hover:text-violet-200"
+                           aria-label="Try AI-powered semantic search with GIF Genie">
+                            <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                <path d="M12 2a5 5 0 015 5c0 5.25-5 10-5 10S7 12.25 7 7a5 5 0 015-5z"/>
+                                <circle cx="12" cy="7" r="2"/>
+                            </svg>
+                            Try GIF Genie — AI semantic search
+                        </a>
+                    </div>
+                @endif
             </div>
         </div>
     </section>
@@ -63,7 +78,6 @@
                         :url="$gif->url"
                         :title="$gif->title"
                         :mimeType="$gif->mime_type"
-                        :size="$gif->formatted_size"
                     />
                 @endforeach
 

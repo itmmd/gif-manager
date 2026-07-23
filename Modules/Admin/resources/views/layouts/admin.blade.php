@@ -102,11 +102,6 @@
             @if (Route::has('admin.gifs.index'))
                 <a class="nav-link {{ request()->routeIs('admin.gifs.*') ? 'active' : '' }}"
                    href="{{ route('admin.gifs.index') }}">
-                    {{--
-                        Icon: film-strip with play triangle — universally
-                        understood as "animated / video / GIF content".
-                        Stroke style matches the Dashboard icon (1.5px, currentColor).
-                    --}}
                     <svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
                          stroke="currentColor" stroke-width="1.5" aria-hidden="true">
                         <rect x="2" y="4" width="20" height="16" rx="2"/>
@@ -114,6 +109,25 @@
                         <path d="M2 9h4M18 9h4M2 15h4M18 15h4"/>
                     </svg>
                     <span class="nav-text">GIFs</span>
+                </a>
+            @endif
+
+            @if (Route::has('admin.ai.moderation'))
+                <a class="nav-link {{ request()->routeIs('admin.ai.moderation') ? 'active' : '' }}"
+                   href="{{ route('admin.ai.moderation') }}">
+                    <svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+                        <line x1="12" y1="9" x2="12" y2="13"/>
+                        <line x1="12" y1="17" x2="12.01" y2="17"/>
+                    </svg>
+                    <span class="nav-text">
+                        Moderation
+                        @php $flaggedCount = \Modules\Gif\Models\Gif::flagged()->count(); @endphp
+                        @if ($flaggedCount > 0)
+                            <span style="margin-left:auto; background:#ef4444; color:#fff; border-radius:10px; font-size:10px; padding:1px 6px; font-weight:700;">{{ $flaggedCount }}</span>
+                        @endif
+                    </span>
                 </a>
             @endif
         </div>

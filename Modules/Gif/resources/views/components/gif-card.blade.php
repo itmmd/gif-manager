@@ -1,23 +1,22 @@
 {{--
     Shared GIF Card Component
     --------------------------------------------------------------------------
-    Used in both the public gallery (/gifs) and the Landing Showcase section.
+    Used in the public gallery (/gifs), Landing Showcase, and Related section.
 
     Props:
       $href      — URL of the detail page (route('gifs.show', $gif))
       $url       — Public URL of the GIF/MP4 file
       $title     — Display title (already sanitised by Gif model mutator)
       $mimeType  — 'image/gif' | 'video/mp4'
-      $size      — Formatted file size string, e.g. "1.2 MB" (optional)
+      $size      — Formatted file size string, e.g. "1.2 MB"
+                   Pass only in admin contexts — omit in public Gallery/Showcase.
+                   File size is a technical/admin metric, not useful for end users.
       $reveal    — Whether to add data-reveal scroll animation (default false)
       $delay     — data-reveal-delay value 1–4 (default 1)
 
-    Every card:
-      - Fixed 1:1 aspect-ratio container (aspect-square + overflow-hidden)
-      - object-cover + object-center → uniform crop, no stretching
-      - Title clamped to 1 line (truncate) → never breaks layout
-      - Slide-up overlay on hover (translate-y trick, no opacity flicker)
-      - Accessible: <a> wraps the whole card, aria-label on media element
+    Typography hierarchy:
+      - Title: text-sm font-medium text-white/90 — primary, what the eye hits first
+      - Size:  text-xs text-white/40             — secondary, muted, clearly subordinate
 --}}
 @props([
     'href'     => '#',
@@ -29,21 +28,23 @@
     'delay'    => 1,
 ])
 
-<a
-    href="{{ $href }}"
+<div
     @if ($reveal) data-reveal data-reveal-delay="{{ $delay }}" @endif
-    class="group relative block overflow-hidden rounded-2xl border border-white/8 bg-slate-800/60 transition-all duration-200 hover:-translate-y-0.5 hover:border-indigo-500/40 hover:shadow-xl hover:shadow-indigo-500/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
-    aria-label="{{ e($title) }}"
+    class="group flex flex-col overflow-hidden rounded-2xl border border-white/8 bg-slate-800/60 transition-all duration-200 hover:-translate-y-0.5 hover:border-indigo-500/40 hover:shadow-xl hover:shadow-indigo-500/15 focus-within:ring-2 focus-within:ring-indigo-500"
 >
-    {{-- ── Fixed 1:1 container ── --}}
-    <div class="relative aspect-square overflow-hidden">
-
+    {{-- ── Fixed 1:1 image container ── --}}
+    <a
+        href="{{ $href }}"
+        class="relative block aspect-square overflow-hidden focus-visible:outline-none"
+        aria-label="{{ e($title) }}"
+        tabindex="0"
+    >
         @if ($mimeType === 'video/mp4')
             <video
                 src="{{ $url }}"
                 muted autoplay loop playsinline
                 class="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-[1.05]"
-                aria-label="{{ e($title) }}"
+                aria-hidden="true"
             ></video>
         @else
             <img
@@ -53,15 +54,39 @@
                 class="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-[1.05]"
             >
         @endif
+    </a>
 
-        {{-- ── Slide-up overlay ── --}}
-        <div class="absolute inset-x-0 bottom-0 translate-y-full bg-gradient-to-t from-black/80 via-black/40 to-transparent p-3 transition-transform duration-200 ease-out group-hover:translate-y-0">
-            {{-- truncate + line-clamp-1 → long titles never break the card --}}
-            <p class="truncate text-xs font-semibold leading-tight text-white">{{ $title }}</p>
-            @if ($size)
-                <p class="mt-0.5 truncate text-[10px] text-slate-400">{{ $size }}</p>
-            @endif
-        </div>
+    {{-- ── Caption bar — always visible below the image ── --}}
+    {{--
+        overflow-hidden on this wrapper is a safety net independent of
+        line-clamp — if the Tailwind line-clamp plugin is inactive or
+        the browser ignores it, no child can escape the card boundary.
+    --}}
+    <div class="overflow-hidden px-2.5 py-2 space-y-0.5">
+
+        {{--
+            Title: primary — text-sm font-medium, bright white.
+            dir="rtl" + style="direction:rtl" must be on the <p> itself,
+            not just the parent, so the browser places the ellipsis on the
+            correct (right) side for Persian/Arabic titles.
+            overflow-hidden is written explicitly as a second guard in case
+            line-clamp is silently ignored.
+        --}}
+        <p
+            class="line-clamp-1 overflow-hidden text-sm font-medium leading-snug text-white/90"
+            dir="rtl"
+            style="direction:rtl"
+            title="{{ e($title) }}"
+        >{{ $title }}</p>
+
+        {{--
+            File size: secondary / admin-only metadata.
+            Shown only when $size is explicitly passed (admin views).
+            Visually subordinate: smaller, much dimmer than the title.
+        --}}
+        @if ($size)
+            <p class="text-xs font-normal text-white/40">{{ $size }}</p>
+        @endif
 
     </div>
-</a>
+</div>

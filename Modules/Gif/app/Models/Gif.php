@@ -18,6 +18,7 @@ class Gif extends Model
         'file_size',
         'mime_type',
         'original_filename',
+        'status',
         'uploaded_by',
     ];
 
@@ -96,5 +97,44 @@ class Gif extends Model
     public function uploader(): BelongsTo
     {
         return $this->belongsTo(User::class, 'uploaded_by');
+    }
+
+    /** متادیتای AI مرتبط */
+    public function aiMetadata(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(\Modules\Ai\Models\GifAiMetadata::class, 'gif_id');
+    }
+
+    /** فقط GIF‌های تأیید شده (برای گالری عمومی) */
+    public function scopeApproved(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
+    {
+        return $query->where('status', 'approved');
+    }
+
+    /** GIF‌های در انتظار بررسی */
+    public function scopePendingReview(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
+    {
+        return $query->where('status', 'pending_review');
+    }
+
+    /** GIF‌های پرچم‌گذاری شده توسط AI */
+    public function scopeFlagged(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
+    {
+        return $query->where('status', 'flagged');
+    }
+
+    public function isApproved(): bool
+    {
+        return $this->status === 'approved';
+    }
+
+    public function isPendingReview(): bool
+    {
+        return $this->status === 'pending_review';
+    }
+
+    public function isFlagged(): bool
+    {
+        return $this->status === 'flagged';
     }
 }

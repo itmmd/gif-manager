@@ -18,6 +18,9 @@ class GifIndex extends Component
     /** ID of the GIF currently pending delete confirmation */
     public ?int $confirmDeleteId = null;
 
+    /** ID of the GIF whose AI suggestion is being previewed */
+    public ?int $aiSuggestionId = null;
+
     public function confirmDelete(int $id): void
     {
         $this->confirmDeleteId = $id;
@@ -51,10 +54,33 @@ class GifIndex extends Component
         }
     }
 
+    /** Apply the AI suggested title to the GIF. */
+    public function applyAiTitle(int $id): void
+    {
+        $gif = Gif::with('aiMetadata')->find($id);
+
+        if (! $gif || ! $gif->aiMetadata?->suggested_title) {
+            return;
+        }
+
+        // Direct update bypasses the slug-generation logic in the mutator
+        // (slug must not change on title update — existing URLs stay intact).
+        \DB::table('gifs')->where('id', $id)->update([
+            'title' => $gif->aiMetadata->suggested_title,
+        ]);
+
+        $this->aiSuggestionId = null;
+    }
+
+    public function showAiSuggestion(int $id): void
+    {
+        $this->aiSuggestionId = ($this->aiSuggestionId === $id) ? null : $id;
+    }
+
     public function render()
     {
         return view('gif::livewire.gif-index', [
-            'gifs' => Gif::with('uploader')
+            'gifs' => Gif::with(['uploader', 'aiMetadata'])
                          ->latest()
                          ->paginate(12),
         ]);

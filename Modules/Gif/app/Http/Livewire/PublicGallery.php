@@ -15,9 +15,17 @@ class PublicGallery extends Component
 {
     use WithPagination;
 
-    /** جستجوی live — مقدار در URL نگه داشته می‌شه */
+    /** Live search — value kept in URL as ?q= */
     #[Url(as: 'q', history: true)]
     public string $search = '';
+
+    /** Whether the Ai module's GIF Genie route is available. */
+    public bool $genieAvailable = false;
+
+    public function mount(): void
+    {
+        $this->genieAvailable = \Illuminate\Support\Facades\Route::has('gifs.genie');
+    }
 
     public function updatedSearch(): void
     {
@@ -26,7 +34,9 @@ class PublicGallery extends Component
 
     public function render()
     {
-        $gifs = Gif::query()
+        // Only show approved GIFs in the public gallery.
+        // pending_review and flagged GIFs are hidden until admin action.
+        $gifs = Gif::approved()
             ->when($this->search, fn ($q) =>
                 $q->where('title', 'like', '%' . $this->search . '%')
             )
