@@ -7,8 +7,8 @@
                 <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
             </svg>
         </div>
-        <h1 class="text-2xl font-semibold text-gray-900">Reset Password</h1>
-        <p class="mt-1 text-sm text-gray-500">Enter your new password</p>
+        <h1 class="text-2xl font-semibold text-gray-900">{{ __('Reset Password') }}</h1>
+        <p class="mt-1 text-sm text-gray-500">{{ __('Enter your new password') }}</p>
     </div>
 
     {{-- Card --}}
@@ -24,7 +24,7 @@
             <input type="hidden" wire:model="token">
 
             <div>
-                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email address</label>
+                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">{{ __('Email address') }}</label>
                 <input
                     id="email"
                     type="email"
@@ -39,7 +39,7 @@
             </div>
 
             <div class="mt-4">
-                <label for="password" class="block text-sm font-medium text-gray-700 mb-1">New password</label>
+                <label for="password" class="block text-sm font-medium text-gray-700 mb-1">{{ __('New password') }}</label>
                 <input
                     id="password"
                     type="password"
@@ -55,7 +55,7 @@
             </div>
 
             <div class="mt-4">
-                <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-1">Confirm new password</label>
+                <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-1">{{ __('Confirm new password') }}</label>
                 <input
                     id="password_confirmation"
                     type="password"
@@ -70,8 +70,8 @@
                 <button type="submit"
                         wire:loading.attr="disabled"
                         class="w-full inline-flex items-center justify-center rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-60 transition">
-                    <span wire:loading.remove>Reset password</span>
-                    <span wire:loading>Resetting…</span>
+                    <span wire:loading.remove>{{ __('Reset password') }}</span>
+                    <span wire:loading>{{ __('Resetting…') }}</span>
                 </button>
             </div>
         </form>

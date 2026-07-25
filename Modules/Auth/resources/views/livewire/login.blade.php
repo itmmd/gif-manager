@@ -8,7 +8,7 @@
             </svg>
         </div>
         <h1 class="text-2xl font-semibold text-gray-900">{{ config('app.name') }}</h1>
-        <p class="mt-1 text-sm text-gray-500">Sign in to your account</p>
+        <p class="mt-1 text-sm text-gray-500">{{ __('Sign in to your account') }}</p>
     </div>
 
     {{-- Card --}}
@@ -22,13 +22,13 @@
 
         @if (request()->has('reset'))
             <div class="mb-5 rounded-lg bg-green-50 border border-green-200 px-4 py-3 text-sm text-green-700" role="alert">
-                Your password has been reset. Please sign in.
+                {{ __('Your password has been reset. Please sign in.') }}
             </div>
         @endif
 
         <form wire:submit="login" novalidate>
             <div>
-                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email address</label>
+                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">{{ __('Email address') }}</label>
                 <input
                     id="email"
                     type="email"
@@ -44,7 +44,7 @@
             </div>
 
             <div class="mt-4">
-                <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                <label for="password" class="block text-sm font-medium text-gray-700 mb-1">{{ __('Password') }}</label>
                 <input
                     id="password"
                     type="password"
@@ -62,11 +62,11 @@
                 <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
                     <input type="checkbox" wire:model="remember"
                            class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                    Remember me
+                    {{ __('Remember me') }}
                 </label>
                 @if (Route::has('password.request'))
                     <a href="{{ route('password.request') }}"
-                       class="text-sm text-indigo-600 hover:text-indigo-500">Forgot password?</a>
+                       class="text-sm text-indigo-600 hover:text-indigo-500">{{ __('Forgot password?') }}</a>
                 @endif
             </div>
 
@@ -74,8 +74,8 @@
                 <button type="submit"
                         wire:loading.attr="disabled"
                         class="w-full inline-flex items-center justify-center rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-60 transition">
-                    <span wire:loading.remove>Sign in</span>
-                    <span wire:loading>Signing in…</span>
+                    <span wire:loading.remove>{{ __('Sign in') }}</span>
+                    <span wire:loading>{{ __('Signing in…') }}</span>
                 </button>
             </div>
         </form>
@@ -84,8 +84,8 @@
 
     @if (Route::has('register'))
         <p class="mt-6 text-center text-sm text-gray-500">
-            Don't have an account?
-            <a href="{{ route('register') }}" class="font-medium text-indigo-600 hover:text-indigo-500">Create one</a>
+            {{ __("Don't have an account?") }}
+            <a href="{{ route('register') }}" class="font-medium text-indigo-600 hover:text-indigo-500">{{ __('Create one') }}</a>
         </p>
     @endif
 

@@ -19,10 +19,20 @@ class Register extends Component
     #[Validate('required|string|email|max:255|unique:users,email')]
     public string $email = '';
 
-    #[Validate('required|string|min:8|confirmed')]
     public string $password = '';
 
     public string $password_confirmation = '';
+
+    /**
+     * Password rule kept here (not in a #[Validate] attribute) so the min
+     * length can be centralised in config('auth.password.min_length').
+     */
+    protected function rules(): array
+    {
+        return [
+            'password' => 'required|string|min:'.config('auth.password.min_length').'|confirmed',
+        ];
+    }
 
     public function register(CreatesNewUsers $creator): void
     {
@@ -38,7 +48,7 @@ class Register extends Component
         auth()->login($user);
         session()->regenerate();
 
-        $this->redirect(config('fortify.home', '/home'), navigate: false);
+        $this->redirect(route(config('auth.redirects.after_register')), navigate: false);
     }
 
     public function render(): View

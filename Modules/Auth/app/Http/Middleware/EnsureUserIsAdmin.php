@@ -10,14 +10,12 @@ class EnsureUserIsAdmin
 {
     public function handle(Request $request, Closure $next): Response
     {
-        // Not logged in → redirect to login
         if (! auth()->check()) {
-            return redirect()->route('login');
+            return redirect()->route(config('auth.redirects.guest'));
         }
 
-        // Logged in but not admin → 403
         if (! auth()->user()->isAdmin()) {
-            abort(403, 'Access denied. Admin privileges required.');
+            abort(403, __('Access denied. Admin privileges required.'));
         }
 
         return $next($request);

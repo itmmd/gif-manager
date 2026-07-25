@@ -1,12 +1,5 @@
-{{--
-    Final CTA Section — Task 29
-    ────────────────────────────────────────────────────────────
-    • Distinct from Hero: full-width gradient card with noise texture
-    • Ripple effect on primary button (Alpine.js + CSS @keyframes)
-    • Strong conversion copy, secondary link to login
-    • scroll-reveal on entry
-    ────────────────────────────────────────────────────────────
---}}
+@php $cta = config('landing.cta'); @endphp
+
 <section
     id="cta"
     aria-label="Get Started"
@@ -56,26 +49,25 @@
                             border:1px solid rgba(99,102,241,0.30);
                             padding:0.35rem 1rem;
                             color:#a5b4fc;">
-                    Start for free — no credit card needed
+                    {{ $cta['eyebrow'] }}
                 </div>
 
                 {{-- Headline --}}
                 <h2 class="font-black tracking-tight text-white mb-5"
                     style="font-size:clamp(2rem,6vw,3.5rem); line-height:1.08; letter-spacing:-0.03em;">
-                    Your GIF collection<br>
+                    {{ $cta['headline'] }}<br>
                     <span style="
                         background: linear-gradient(130deg,#a5b4fc,#818cf8,#c084fc,#67e8f9);
                         -webkit-background-clip:text;
                         -webkit-text-fill-color:transparent;
                         background-clip:text;
-                    ">deserves better.</span>
+                    ">{{ $cta['headline_em'] }}</span>
                 </h2>
 
                 {{-- Sub-copy --}}
                 <p class="text-slate-400 leading-relaxed max-w-lg mx-auto mb-10"
                    style="font-size:clamp(1rem,2vw,1.15rem);">
-                    Join 5,000+ creators who stopped losing their best GIFs in endless folders.
-                    Set up in under 2 minutes.
+                    {{ $cta['subhead'] }}
                 </p>
 
                 {{-- Ripple CTA button --}}
@@ -115,7 +107,7 @@
                                  stroke="currentColor" stroke-width="2.5" aria-hidden="true">
                                 <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
                             </svg>
-                            Create Free Account
+                            {{ $cta['primary'] }}
                         </a>
 
                         {{-- Ripple circles --}}
@@ -132,28 +124,20 @@
                         href="{{ route('login') }}"
                         class="text-sm text-slate-400 hover:text-slate-200 transition-colors"
                     >
-                        Already have an account? <span class="underline underline-offset-2">Sign in →</span>
+                        {{ $cta['secondary_pre'] }} <span class="underline underline-offset-2">{{ $cta['secondary'] }} →</span>
                     </a>
 
                 </div>
 
                 {{-- Trust signals --}}
                 <div class="mt-10 flex flex-wrap items-center justify-center gap-6 text-xs text-slate-500">
-                    <span class="flex items-center gap-1.5">
-                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                             stroke-width="2" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
-                        Free forever plan
-                    </span>
-                    <span class="flex items-center gap-1.5">
-                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                             stroke-width="2" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
-                        No credit card required
-                    </span>
-                    <span class="flex items-center gap-1.5">
-                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                             stroke-width="2" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
-                        Cancel anytime
-                    </span>
+                    @foreach ($cta['trust_signals'] as $signal)
+                        <span class="flex items-center gap-1.5">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                 stroke-width="2" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+                            {{ $signal }}
+                        </span>
+                    @endforeach
                 </div>
 
             </div>

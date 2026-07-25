@@ -29,30 +29,31 @@ class Login extends Component
     {
         $this->validate();
 
-        $throttleKey = Str::lower($this->email).'|'.request()->ip();
+        $prefix = config('auth.limits.cache_prefix');
+        $max = (int) config('auth.limits.login_max');
+        $key = $prefix.':'.Str::lower($this->email).'|'.request()->ip();
 
-        if (RateLimiter::tooManyAttempts('login:'.$throttleKey, 5)) {
-            $seconds = RateLimiter::availableIn('login:'.$throttleKey);
-            $this->errorMessage = __('Too many login attempts. Please try again in :seconds seconds.', ['seconds' => $seconds]);
+        if (RateLimiter::tooManyAttempts($key, $max)) {
+            $this->errorMessage = __('Too many login attempts. Please try again in :seconds seconds.', [
+                'seconds' => RateLimiter::availableIn($key),
+            ]);
 
             return;
         }
 
         if (! Auth::attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
-            RateLimiter::hit('login:'.$throttleKey);
+            RateLimiter::hit($key);
             $this->errorMessage = __('These credentials do not match our records.');
 
             return;
         }
 
-        RateLimiter::clear('login:'.$throttleKey);
+        RateLimiter::clear($key);
         session()->regenerate();
 
-        // Full-page redirect back to the Landing page after login.
-        // navigate: false ensures a hard browser reload so the new session
-        // state (auth cookie) is picked up by every component on the page —
-        // including the navbar which reads auth()->check() server-side.
-        $this->redirect(route('landing'), navigate: false);
+        // navigate:false forces a full reload so the new session cookie
+        // is picked up by every component (e.g. the navbar).
+        $this->redirect(route(config('auth.redirects.after_login')), navigate: false);
     }
 
     public function render(): View

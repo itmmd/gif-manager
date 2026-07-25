@@ -1,15 +1,8 @@
-{{--
-    Statistics Section  (Task 27)
-    --------------------------------------------------------------------------
-    Requirements covered:
-      - Counter animation: numbers animate from 0 → final value when the
-        section enters the viewport, driven by Alpine.js x-intersect.
-      - Minimal design, large bold typography on numbers.
+@php
+    $s     = config('landing.stats');
+    $stats = $s['items'];
+@endphp
 
-    Approach:
-      Each counter uses x-intersect:enter.once on its own wrapper to start
-      a requestAnimationFrame loop. Simple, self-contained, no parent state.
-    --}}
 <section
     id="statistics"
     aria-label="Statistics"
@@ -27,29 +20,20 @@
                 data-reveal
                 class="glass mb-4 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-medium uppercase tracking-wider text-indigo-300"
             >
-                Stats
+                {{ $s['eyebrow'] }}
             </p>
             <h2
                 data-reveal
                 data-reveal-delay="1"
                 class="text-4xl font-extrabold tracking-tight text-white sm:text-5xl"
             >
-                Trusted by
-                <span class="text-gradient">thousands</span>
+                {{ $s['heading'] }}
+                <span class="text-gradient">{{ $s['heading_em'] }}</span>
             </h2>
         </div>
 
-        {{-- ── Counter grid ── --}}
+        {{-- Counter grid --}}
         <div class="grid grid-cols-2 gap-8 lg:grid-cols-4">
-
-            @php
-                $stats = [
-                    ['value' => 10000, 'suffix' => '+', 'label' => 'GIFs Uploaded', 'duration' => 2000],
-                    ['value' => 5000,  'suffix' => '+', 'label' => 'Active Users',  'duration' => 1800],
-                    ['value' => 120,   'suffix' => '+', 'label' => 'Categories',    'duration' => 1400],
-                    ['value' => 99.9,  'suffix' => '%',  'label' => 'Uptime',       'duration' => 1600],
-                ];
-            @endphp
 
             @foreach ($stats as $i => $stat)
                 <div
@@ -76,8 +60,8 @@
                     x-intersect:enter.once="run()"
                     class="group relative text-center"
                 >
-                    {{-- Divider line (not on mobile, not after last) --}}
-                    @if ($i < 3)
+                    {{-- Divider line (desktop only, not after last) --}}
+                    @if (!$loop->last)
                         <div class="pointer-events-none absolute right-0 top-1/2 hidden h-12 w-px -translate-y-1/2 bg-white/10 lg:block" aria-hidden="true"></div>
                     @endif
 

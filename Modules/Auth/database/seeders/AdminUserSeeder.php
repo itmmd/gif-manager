@@ -9,33 +9,17 @@ use Illuminate\Support\Facades\Hash;
 class AdminUserSeeder extends Seeder
 {
     /**
-     * Idempotent — safe to run multiple times.
-     *
-     * - If user with this email exists → updates role=admin + password.
-     * - If not → creates the user with role=admin.
-     *
-     * On a fresh environment set ADMIN_EMAIL / ADMIN_PASSWORD in .env,
-     * or the defaults below will be used.
-     *
-     * Usage:
-     *   php artisan db:seed --class="Modules\Auth\Database\Seeders\AdminUserSeeder"
-     *   php artisan db:seed   (runs via AuthDatabaseSeeder)
+     * Idempotent: updateOrCreate an admin from config('auth.admin.*').
+     * Read via config (not env()) so it stays correct after `config:cache`.
      */
     public function run(): void
     {
-        $adminEmail    = env('ADMIN_EMAIL',    'admin@gmail.com');
-        $adminName     = env('ADMIN_NAME',     'Admin');
-        $adminPassword = env('ADMIN_PASSWORD', 'Admin123456');
-
-        // password is included in the update values so:
-        //   - on create  → user gets password immediately (no nullable violation)
-        //   - on update  → password is refreshed to the current env value
         $user = User::updateOrCreate(
-            ['email' => $adminEmail],
+            ['email' => config('auth.admin.email')],
             [
-                'name'     => $adminName,
-                'role'     => 'admin',
-                'password' => Hash::make($adminPassword),
+                'name' => config('auth.admin.name'),
+                'role' => 'admin',
+                'password' => Hash::make(config('auth.admin.password')),
             ]
         );
 

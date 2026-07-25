@@ -1,27 +1,7 @@
-{{--
-    Showcase Section
-    --------------------------------------------------------------------------
-    Displays up to 8 of the latest real GIFs from the database.
-    Falls back to placeholder gradient cards when no GIFs exist yet.
-
-    $showcaseGifs is injected by Landing.php via GifShowcaseInterface
-    (Core contract) — Landing never imports the Gif model directly.
---}}
 @php
     /** @var \Illuminate\Support\Collection $showcaseGifs */
-    $hasRealGifs = isset($showcaseGifs) && $showcaseGifs->isNotEmpty();
-
-    // Placeholder cards shown when DB is empty or service returns nothing.
-    $placeholders = [
-        ['label' => 'Gaming Reactions',   'gradient' => 'from-indigo-600/50 to-violet-700/40'],
-        ['label' => 'Team Memes',         'gradient' => 'from-violet-600/50 to-fuchsia-600/40'],
-        ['label' => 'Tech Demos',         'gradient' => 'from-cyan-600/50 to-blue-700/40'],
-        ['label' => 'Celebrations',       'gradient' => 'from-pink-600/50 to-rose-600/40'],
-        ['label' => 'Nature & Travel',    'gradient' => 'from-emerald-600/50 to-teal-700/40'],
-        ['label' => 'UI Animations',      'gradient' => 'from-amber-600/50 to-orange-700/40'],
-        ['label' => 'Product Mockups',    'gradient' => 'from-indigo-600/50 to-blue-600/40'],
-        ['label' => 'Tutorial Steps',     'gradient' => 'from-violet-600/50 to-purple-700/40'],
-    ];
+    $hasRealGifs  = isset($showcaseGifs) && $showcaseGifs->isNotEmpty();
+    $placeholders = config('landing.showcase.placeholders');
 @endphp
 
 <section
@@ -35,7 +15,7 @@
         <div class="ambient-blob" style="width: 420px; height: 420px; top: 20%; left: 50%; margin-left: -210px; background: radial-gradient(circle, rgba(99,102,241,0.10), transparent 70%);"></div>
     </div>
 
-    {{-- ── Section header ── --}}
+    {{-- Section header --}}
     <div class="relative z-10 mx-auto max-w-7xl px-6 lg:px-8">
 
         <div class="mx-auto max-w-2xl text-center">
@@ -63,13 +43,7 @@
             </p>
         </div>
 
-        {{-- ── Showcase grid ── --}}
-        {{--
-            CSS Grid با ستون‌های هم‌عرض:
-            - هر کارت aspect-ratio: 1/1 (مربع) + object-fit: cover
-            - با ۱ گیف هم grid درست کار می‌کند (auto-fill پر می‌کند)
-            - با placeholder هم همان ابعاد ثابت حفظ می‌شود
-        --}}
+        {{-- Showcase grid (square aspect cards, auto-fills with any count) --}}
         <div class="mx-auto mt-16 max-w-6xl grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
 
             @if ($hasRealGifs)
@@ -111,7 +85,7 @@
 
         </div>
 
-        {{-- ── View all button ── --}}
+        {{-- View all button --}}
         <div
             data-reveal
             data-reveal-delay="2"
@@ -121,7 +95,7 @@
                 href="{{ route('gifs.index') }}"
                 class="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-500 to-violet-500 px-7 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/30 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-indigo-500/50"
             >
-                View all GIFs
+                {{ config('landing.showcase.view_all_label') }}
                 <svg class="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
                 </svg>
@@ -130,7 +104,7 @@
 
     </div>
 
-    {{-- ── Smooth bottom transition into next section ── --}}
+    {{-- Smooth bottom transition into next section --}}
     <div class="pointer-events-none absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#0a0a0f] to-transparent" aria-hidden="true"></div>
 
 </section>

@@ -1,18 +1,14 @@
-{{--
-    Testimonials Section — Task 28
-    ────────────────────────────────────────────────────────────
-    • Horizontal drag-scroll carousel (CSS scroll-snap, no JS library)
-    • Alpine.js for prev/next buttons and active-dot tracking
-    • Each card: glassmorphism, avatar, name, role, quote, star rating
-    • scroll-reveal on section entry via data-reveal / IntersectionObserver
-    ────────────────────────────────────────────────────────────
---}}
+@php
+    $t = config('landing.testimonials');
+    $testimonials = $t['items'];
+@endphp
+
 <section
     id="testimonials"
     aria-label="Testimonials"
     class="relative py-28 overflow-hidden"
 >
-    {{-- subtle top separator glow --}}
+    {{-- top separator glow --}}
     <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 h-px"
          style="background: linear-gradient(90deg, transparent, rgba(99,102,241,0.4), transparent);"></div>
 
@@ -29,61 +25,16 @@
         {{-- Section header --}}
         <div class="text-center mb-16" data-reveal>
             <p class="text-sm font-semibold tracking-widest uppercase mb-3"
-               style="color: var(--landing-primary);">What people say</p>
+               style="color: var(--landing-primary);">{{ $t['eyebrow'] }}</p>
             <h2 class="text-4xl sm:text-5xl font-black tracking-tight text-white">
-                Loved by creators
+                {{ $t['heading'] }}
             </h2>
             <p class="mt-4 text-slate-400 max-w-xl mx-auto">
-                Thousands of people use GIF Manager every day to organise and share their collections.
+                {{ $t['subhead'] }}
             </p>
         </div>
 
         {{-- Carousel --}}
-        @php
-        $testimonials = [
-            [
-                'name'   => 'Sarah Kim',
-                'role'   => 'Content Creator',
-                'avatar' => 'SK',
-                'color'  => '#6366f1',
-                'stars'  => 5,
-                'quote'  => 'Finally a tool that actually keeps my GIF library tidy. The smart search alone saves me 20 minutes a day.',
-            ],
-            [
-                'name'   => 'Marcus Reid',
-                'role'   => 'UI Designer',
-                'avatar' => 'MR',
-                'color'  => '#8b5cf6',
-                'stars'  => 5,
-                'quote'  => 'The auto-categorize feature is genuinely magic. I dumped 3,000 GIFs in and it sorted them perfectly.',
-            ],
-            [
-                'name'   => 'Priya Nair',
-                'role'   => 'Social Media Manager',
-                'avatar' => 'PN',
-                'color'  => '#06b6d4',
-                'stars'  => 5,
-                'quote'  => 'One-click sharing to any platform changed how I work. My engagement went up 40% since I started using it.',
-            ],
-            [
-                'name'   => 'Tom Erikson',
-                'role'   => 'Indie Developer',
-                'avatar' => 'TE',
-                'color'  => '#f59e0b',
-                'stars'  => 5,
-                'quote'  => 'Clean, fast, and zero bloat. This is exactly what a GIF manager should be — nothing more, nothing less.',
-            ],
-            [
-                'name'   => 'Lena Schulz',
-                'role'   => 'Motion Designer',
-                'avatar' => 'LS',
-                'color'  => '#10b981',
-                'stars'  => 5,
-                'quote'  => 'I\'ve tried every GIF manager out there. This is the only one that doesn\'t get in my way.',
-            ],
-        ];
-        @endphp
-
         <div
             x-data="{
                 active: 0,
@@ -121,7 +72,7 @@
                     scrollbar-width: none;
                 "
             >
-                @foreach($testimonials as $i => $t)
+                @foreach($testimonials as $i => $item)
                 <article
                     class="flex-shrink-0 flex flex-col justify-between rounded-2xl p-7 transition-transform duration-300"
                     style="
@@ -132,11 +83,11 @@
                         backdrop-filter: blur(16px);
                         -webkit-backdrop-filter: blur(16px);
                     "
-                    aria-label="Testimonial from {{ $t['name'] }}"
+                    aria-label="Testimonial from {{ $item['name'] }}"
                 >
                     {{-- Stars --}}
-                    <div class="flex gap-0.5 mb-5" aria-label="{{ $t['stars'] }} out of 5 stars">
-                        @for($s = 0; $s < $t['stars']; $s++)
+                    <div class="flex gap-0.5 mb-5" aria-label="{{ $item['stars'] }} out of 5 stars">
+                        @for($s = 0; $s < $item['stars']; $s++)
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b" aria-hidden="true">
                                 <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                             </svg>
@@ -145,18 +96,18 @@
 
                     {{-- Quote --}}
                     <blockquote class="text-slate-300 leading-relaxed text-[0.95rem] mb-7 flex-1">
-                        "{{ $t['quote'] }}"
+                        "{{ $item['quote'] }}"
                     </blockquote>
 
                     {{-- Author --}}
                     <div class="flex items-center gap-3">
                         <div class="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white flex-shrink-0"
-                             style="background: {{ $t['color'] }};">
-                            {{ $t['avatar'] }}
+                             style="background: {{ $item['color'] }};">
+                            {{ $item['avatar'] }}
                         </div>
                         <div>
-                            <div class="text-white font-semibold text-sm">{{ $t['name'] }}</div>
-                            <div class="text-slate-500 text-xs">{{ $t['role'] }}</div>
+                            <div class="text-white font-semibold text-sm">{{ $item['name'] }}</div>
+                            <div class="text-slate-500 text-xs">{{ $item['role'] }}</div>
                         </div>
                     </div>
                 </article>
@@ -183,7 +134,7 @@
 
                 {{-- Dots --}}
                 <div class="flex gap-2" role="tablist" aria-label="Testimonial navigation">
-                    @foreach($testimonials as $i => $t)
+                    @foreach($testimonials as $i => $item)
                     <button
                         @click="active = {{ $i }}; scrollTo({{ $i }})"
                         :class="active === {{ $i }}

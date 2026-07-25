@@ -1,27 +1,8 @@
-{{--
-    Navbar Component
-    --------------------------------------------------------------------------
-    Fixed glassmorphism navbar that becomes opaque on scroll (Linear-style).
-    Uses Alpine $store('scroll') defined globally in the landing layout to
-    detect scroll position and swap background/border opacity.
-
-    Auth state is resolved server-side via auth() helper. The page performs
-    a full reload after login/logout (navigate: false), so the navbar always
-    reflects the true session state without any client-side polling.
-
-    Structure:
-      - Desktop (≥lg): logo | center nav | auth area (dropdown or guest CTAs)
-      - Mobile (<lg):  logo | hamburger → full-screen overlay panel
---}}
 @props([
-    'links' => [
-        ['href' => '#features',    'label' => 'Features'],
-        ['href' => '#why-us',      'label' => 'Why Us'],
-        ['href' => '#showcase',    'label' => 'Showcase'],
-        ['href' => '#statistics',  'label' => 'Stats'],
-        ['href' => '#faq',         'label' => 'FAQ'],
-    ],
+    'links' => null,
 ])
+
+@php $links = $links ?? config('landing.nav'); @endphp
 
 <script>
 document.addEventListener('alpine:init', () => {
@@ -85,7 +66,7 @@ document.addEventListener('alpine:init', () => {
 >
     <nav class="mx-auto flex h-16 max-w-7xl items-center justify-between px-6 lg:px-8">
 
-        {{-- ── Logo ──────────────────────────────────────────── --}}
+        {{-- Logo --}}
         <a href="{{ route('landing') }}" class="group flex items-center gap-2.5 shrink-0">
             <span class="relative flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 via-violet-500 to-cyan-500 shadow-lg shadow-indigo-500/30 transition-transform duration-300 group-hover:scale-110">
                 <svg class="h-5 w-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -97,7 +78,7 @@ document.addEventListener('alpine:init', () => {
             </span>
         </a>
 
-        {{-- ── Desktop center nav ────────────────────────────── --}}
+        {{-- Desktop center nav --}}
         <div class="hidden lg:flex items-center gap-1">
             @foreach ($links as $link)
                 <a
@@ -115,7 +96,7 @@ document.addEventListener('alpine:init', () => {
             </a>
         </div>
 
-        {{-- ── Desktop auth area ─────────────────────────────── --}}
+        {{-- Desktop auth area --}}
         <div class="hidden lg:flex items-center gap-3 shrink-0">
             @auth
                 {{-- Logged-in: user dropdown --}}
@@ -212,7 +193,7 @@ document.addEventListener('alpine:init', () => {
             @endauth
         </div>
 
-        {{-- ── Mobile hamburger — min 44×44 px (WCAG 2.5.5) ─── --}}
+        {{-- Mobile hamburger — min 44×44 px (WCAG 2.5.5) --}}
         <button
             x-ref="hamburger"
             type="button"
@@ -230,7 +211,7 @@ document.addEventListener('alpine:init', () => {
         </button>
     </nav>
 
-    {{-- ── Mobile full-screen overlay ──────────────────────────────────── --}}
+    {{-- Mobile full-screen overlay --}}
     <div
         x-ref="panel"
         id="mobile-nav-panel"

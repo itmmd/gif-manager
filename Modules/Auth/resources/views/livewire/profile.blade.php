@@ -7,25 +7,25 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
             </svg>
         </div>
-        <h1 class="text-2xl font-semibold text-gray-900">My Profile</h1>
-        <p class="mt-1 text-sm text-gray-500">Manage your account information</p>
+        <h1 class="text-2xl font-semibold text-gray-900">{{ __('My Profile') }}</h1>
+        <p class="mt-1 text-sm text-gray-500">{{ __('Manage your account information') }}</p>
     </div>
 
     {{-- ── Profile information card ── --}}
     <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 mb-6">
 
-        <h2 class="text-base font-semibold text-gray-900 mb-5">Account Information</h2>
+        <h2 class="text-base font-semibold text-gray-900 mb-5">{{ __('Account Information') }}</h2>
 
         @if ($profileSaved)
             <div class="mb-5 rounded-lg bg-green-50 border border-green-200 px-4 py-3 text-sm text-green-700" role="alert" aria-live="polite">
-                Profile updated successfully.
+                {{ __('Profile updated successfully.') }}
             </div>
         @endif
 
         <form wire:submit="updateProfile" novalidate>
 
             <div>
-                <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Full name</label>
+                <label for="name" class="block text-sm font-medium text-gray-700 mb-1">{{ __('Full name') }}</label>
                 <input
                     id="name"
                     type="text"
@@ -40,7 +40,7 @@
             </div>
 
             <div class="mt-4">
-                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email address</label>
+                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">{{ __('Email address') }}</label>
                 <input
                     id="email"
                     type="email"
@@ -60,12 +60,12 @@
                     wire:loading.attr="disabled"
                     class="inline-flex items-center justify-center rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-60 transition"
                 >
-                    <span wire:loading.remove wire:target="updateProfile">Save changes</span>
-                    <span wire:loading wire:target="updateProfile">Saving…</span>
+                    <span wire:loading.remove wire:target="updateProfile">{{ __('Save changes') }}</span>
+                    <span wire:loading wire:target="updateProfile">{{ __('Saving…') }}</span>
                 </button>
 
                 <a href="{{ route('landing') }}" class="text-sm text-gray-500 hover:text-gray-700">
-                    ← Back to home
+                    {{ __('← Back to home') }}
                 </a>
             </div>
 
@@ -75,18 +75,18 @@
     {{-- ── Change password card ── --}}
     <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
 
-        <h2 class="text-base font-semibold text-gray-900 mb-5">Change Password</h2>
+        <h2 class="text-base font-semibold text-gray-900 mb-5">{{ __('Change Password') }}</h2>
 
         @if ($passwordSaved)
             <div class="mb-5 rounded-lg bg-green-50 border border-green-200 px-4 py-3 text-sm text-green-700" role="alert" aria-live="polite">
-                Password updated successfully.
+                {{ __('Password updated successfully.') }}
             </div>
         @endif
 
         <form wire:submit="updatePassword" novalidate>
 
             <div>
-                <label for="current_password" class="block text-sm font-medium text-gray-700 mb-1">Current password</label>
+                <label for="current_password" class="block text-sm font-medium text-gray-700 mb-1">{{ __('Current password') }}</label>
                 <input
                     id="current_password"
                     type="password"
@@ -101,7 +101,7 @@
             </div>
 
             <div class="mt-4">
-                <label for="password" class="block text-sm font-medium text-gray-700 mb-1">New password</label>
+                <label for="password" class="block text-sm font-medium text-gray-700 mb-1">{{ __('New password') }}</label>
                 <input
                     id="password"
                     type="password"
@@ -116,7 +116,7 @@
             </div>
 
             <div class="mt-4">
-                <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-1">Confirm new password</label>
+                <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-1">{{ __('Confirm new password') }}</label>
                 <input
                     id="password_confirmation"
                     type="password"
@@ -133,8 +133,8 @@
                     wire:loading.attr="disabled"
                     class="inline-flex items-center justify-center rounded-lg bg-gray-800 px-5 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-800 focus:ring-offset-2 disabled:opacity-60 transition"
                 >
-                    <span wire:loading.remove wire:target="updatePassword">Update password</span>
-                    <span wire:loading wire:target="updatePassword">Updating…</span>
+                    <span wire:loading.remove wire:target="updatePassword">{{ __('Update password') }}</span>
+                    <span wire:loading wire:target="updatePassword">{{ __('Updating…') }}</span>
                 </button>
             </div>
 

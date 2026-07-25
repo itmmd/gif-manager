@@ -2,7 +2,6 @@
 
 namespace Modules\Auth\Http\Livewire;
 
-use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
@@ -15,8 +14,6 @@ use Modules\Auth\Actions\Fortify\UpdateUserProfileInformation;
 #[Title('My Profile')]
 class Profile extends Component
 {
-    // ── Profile information ───────────────────────────────────────────────
-
     #[Validate('required|string|max:255')]
     public string $name = '';
 
@@ -25,23 +22,29 @@ class Profile extends Component
 
     public bool $profileSaved = false;
 
-    // ── Password change ───────────────────────────────────────────────────
-
     #[Validate('required|string')]
     public string $current_password = '';
 
-    #[Validate('required|string|min:8|confirmed')]
     public string $password = '';
 
     public string $password_confirmation = '';
 
     public bool $passwordSaved = false;
 
-    // ─────────────────────────────────────────────────────────────────────
+    /**
+     * Password rule kept here (not in a #[Validate] attribute) so the min
+     * length can be centralised in config('auth.password.min_length').
+     */
+    protected function rules(): array
+    {
+        return [
+            'password' => 'required|string|min:'.config('auth.password.min_length').'|confirmed',
+        ];
+    }
 
     public function mount(): void
     {
-        $this->name  = auth()->user()->name;
+        $this->name = auth()->user()->name;
         $this->email = auth()->user()->email;
     }
 
@@ -51,7 +54,7 @@ class Profile extends Component
         $this->validateOnly('email');
 
         $updater->update(auth()->user(), [
-            'name'  => $this->name,
+            'name' => $this->name,
             'email' => $this->email,
         ]);
 
@@ -64,8 +67,8 @@ class Profile extends Component
         $this->validateOnly('password');
 
         $updater->update(auth()->user(), [
-            'current_password'      => $this->current_password,
-            'password'              => $this->password,
+            'current_password' => $this->current_password,
+            'password' => $this->password,
             'password_confirmation' => $this->password_confirmation,
         ]);
 

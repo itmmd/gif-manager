@@ -7,22 +7,21 @@
                 <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
             </svg>
         </div>
-        <h1 class="text-2xl font-semibold text-gray-900">Verify Email</h1>
+        <h1 class="text-2xl font-semibold text-gray-900">{{ __('Verify Email') }}</h1>
     </div>
 
     {{-- Card --}}
     <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 text-center">
 
         <p class="text-sm text-gray-600 leading-relaxed">
-            A verification link has been sent to your email address.
-            Please check your inbox.
+            {{ __('A verification link has been sent to your email address. Please check your inbox.') }}
         </p>
 
         <form method="POST" action="{{ route('verification.send') }}" class="mt-6">
             @csrf
             <button type="submit"
                     class="w-full inline-flex items-center justify-center rounded-lg border border-indigo-600 px-4 py-2.5 text-sm font-medium text-indigo-600 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition">
-                Resend verification email
+                {{ __('Resend verification email') }}
             </button>
         </form>
 
@@ -30,7 +29,7 @@
             @csrf
             <button type="submit"
                     class="w-full text-sm text-gray-500 hover:text-gray-700 transition">
-                Log out
+                {{ __('Log out') }}
             </button>
         </form>
 

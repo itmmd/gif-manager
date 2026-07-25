@@ -1,12 +1,9 @@
-{{--
-    FAQ Section — Task 28
-    ────────────────────────────────────────────────────────────
-    • Alpine.js x-data accordion — one open at a time
-    • Animated height via CSS max-height transition (no JS height calc)
-    • Keyboard accessible: Enter/Space toggle, proper aria-expanded
-    • scroll-reveal on section entry
-    ────────────────────────────────────────────────────────────
---}}
+@php
+    $f = config('landing.faqs');
+    $faqs = $f['items'];
+    $contactEmail = config('landing.brand.contact_email');
+@endphp
+
 <section
     id="faq"
     aria-label="Frequently Asked Questions"
@@ -29,47 +26,18 @@
         {{-- Section header --}}
         <div class="text-center mb-16" data-reveal>
             <p class="text-sm font-semibold tracking-widest uppercase mb-3"
-               style="color: var(--landing-primary);">Got questions?</p>
+               style="color: var(--landing-primary);">{{ $f['eyebrow'] }}</p>
             <h2 class="text-4xl sm:text-5xl font-black tracking-tight text-white">
-                Frequently asked
+                {{ $f['heading'] }}
             </h2>
             <p class="mt-4 text-slate-400">
-                Everything you need to know about GIF Manager.
-                Can't find the answer? <a href="mailto:hello@gifmanager.app"
-                class="text-indigo-400 hover:text-indigo-300 underline underline-offset-2 transition-colors">Send us a message.</a>
+                {{ $f['subhead'] }}
+                {{ $f['contact_text'] }} <a href="mailto:{{ $contactEmail }}"
+                class="text-indigo-400 hover:text-indigo-300 underline underline-offset-2 transition-colors">{{ $f['contact_link'] }}</a>
             </p>
         </div>
 
-        @php
-        $faqs = [
-            [
-                'q' => 'Is GIF Manager free to use?',
-                'a' => 'Yes — the core features (upload, organise, search, share) are completely free. We offer a Pro plan for power users who need unlimited storage, advanced analytics, and team collaboration features.',
-            ],
-            [
-                'q' => 'How does the auto-categorize feature work?',
-                'a' => 'When you upload a GIF, our system analyses the content and automatically assigns relevant tags and categories. You can always edit or override these — it\'s a starting point, not a cage.',
-            ],
-            [
-                'q' => 'What file formats are supported?',
-                'a' => 'We support GIF, WebP (animated), APNG, and MP4 converted to GIF. Maximum file size is 50 MB on the free plan and 200 MB on Pro.',
-            ],
-            [
-                'q' => 'Can I share GIFs with people who don\'t have an account?',
-                'a' => 'Absolutely. Every GIF gets a unique shareable link. Recipients can view and download without signing up. You can also set links to expire or be password-protected.',
-            ],
-            [
-                'q' => 'Is my content private by default?',
-                'a' => 'Yes. All uploads are private by default. You explicitly choose what to make public, share via link, or keep entirely private. We never surface your content to other users without your permission.',
-            ],
-            [
-                'q' => 'Can I import my existing GIF collection?',
-                'a' => 'Yes — you can bulk-upload a folder of GIFs, import from a ZIP archive, or connect to Giphy and Tenor to migrate your saved collections.',
-            ],
-        ];
-        @endphp
-
-        {{-- Accordion --}}
+        {{-- Accordion — one open at a time, animated via max-height --}}
         <dl
             x-data="{ open: null }"
             class="space-y-3"
@@ -98,7 +66,7 @@
                             {{ $faq['q'] }}
                         </span>
 
-                        {{-- Chevron icon — rotates when open --}}
+                        {{-- Chevron — rotates when open --}}
                         <span
                             class="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center transition-all duration-300"
                             style="background:rgba(255,255,255,0.07);"

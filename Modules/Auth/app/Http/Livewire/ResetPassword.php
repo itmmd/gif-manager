@@ -20,12 +20,22 @@ class ResetPassword extends Component
     #[Validate('required|string|email')]
     public string $email = '';
 
-    #[Validate('required|string|min:8|confirmed')]
     public string $password = '';
 
     public string $password_confirmation = '';
 
     public string $errorMessage = '';
+
+    /**
+     * Password rule kept here (not in a #[Validate] attribute) so the min
+     * length can be centralised in config('auth.password.min_length').
+     */
+    protected function rules(): array
+    {
+        return [
+            'password' => 'required|string|min:'.config('auth.password.min_length').'|confirmed',
+        ];
+    }
 
     public function mount(string $token): void
     {
@@ -47,7 +57,7 @@ class ResetPassword extends Component
             function ($user) {
                 $user->forceFill([
                     'password' => Hash::make($this->password),
-                    'remember_token' => Str::random(60),
+                    'remember_token' => Str::random((int) config('auth.tokens.remember_length')),
                 ])->save();
             }
         );

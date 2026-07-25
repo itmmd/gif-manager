@@ -1,3 +1,11 @@
+@php
+    $seo        = config('landing.seo');
+    $siteTitle  = $title ?? $seo['title'];
+    $siteDesc   = $description ?? $seo['description'];
+    $keywords   = $keywords ?? $seo['keywords'];
+    $ogImage    = $seo['og_image'];
+@endphp
+
 <!DOCTYPE html>
 <html lang="en" dir="ltr" class="scroll-smooth">
 <head>
@@ -6,39 +14,31 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     {{-- SEO: Primary --}}
-    <title>{{ $title ?? 'GIF Manager — Organize, Share & Discover GIFs' }}</title>
-    <meta name="description" content="{{ $description ?? 'The fastest way to upload, organize, and share your GIF collection. Smart search, instant categories, one-click sharing.' }}">
-    <meta name="keywords" content="{{ $keywords ?? 'gif manager, gif organizer, upload gif, share gif, gif collection' }}">
-    <meta name="robots" content="index, follow">
+    <title>{{ $siteTitle }}</title>
+    <meta name="description" content="{{ $siteDesc }}">
+    <meta name="keywords" content="{{ $keywords }}">
+    <meta name="robots" content="{{ $seo['robots'] }}">
     <link rel="canonical" href="{{ url()->current() }}">
 
     {{-- SEO: Open Graph --}}
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="{{ $title ?? 'GIF Manager — Organize, Share & Discover GIFs' }}">
-    <meta property="og:description" content="{{ $description ?? 'The fastest way to upload, organize, and share your GIF collection.' }}">
+    <meta property="og:type" content="{{ $seo['og_type'] }}">
+    <meta property="og:title" content="{{ $siteTitle }}">
+    <meta property="og:description" content="{{ $siteDesc }}">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:image" content="{{ asset('images/og-image.png') }}">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
+    <meta property="og:image:width" content="{{ $ogImage['width'] }}">
+    <meta property="og:image:height" content="{{ $ogImage['height'] }}">
     <meta property="og:site_name" content="{{ config('app.name') }}">
 
     {{-- SEO: Twitter Card --}}
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="{{ $title ?? 'GIF Manager — Organize, Share & Discover GIFs' }}">
-    <meta name="twitter:description" content="{{ $description ?? 'The fastest way to upload, organize, and share your GIF collection.' }}">
+    <meta name="twitter:title" content="{{ $siteTitle }}">
+    <meta name="twitter:description" content="{{ $siteDesc }}">
     <meta name="twitter:image" content="{{ asset('images/og-image.png') }}">
 
     {{-- Favicon --}}
     <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
     <link rel="apple-touch-icon" href="{{ asset('images/apple-touch-icon.png') }}">
-
-    {{--
-        Fonts: Inter is self-hosted in public/fonts/inter/.
-        @font-face is declared in this layout's <style> block (not in app.css)
-        to prevent Vite's minifier from removing the space between url() and
-        format() — which causes browsers to silently ignore the font.
-        --font-sans is overridden in app.css @theme to wire Inter into Tailwind.
-    --}}
 
     {{-- Tailwind CSS + Alpine.js (main app build) --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -46,15 +46,9 @@
     {{-- Landing-specific CSS custom properties & dark theme default --}}
     <style>
         /*
-         * Inter Variable Font — self-hosted, no CDN dependency.
-         *
-         * Declared here (in a <style> tag) rather than in app.css to avoid
-         * Vite's CSS minifier removing the required space between url() and
-         * format() — a known quirk in Tailwind v4's build pipeline that causes
-         * browsers to silently reject the @font-face src declaration.
-         *
-         * font-display: swap  → text stays visible during font load (no FOIT).
-         * font-weight: 100 900 → single variable-font file for all weights.
+         * Inter is declared here (not in app.css) so Vite's minifier won't
+         * strip the required space between url() and format() — without it
+         * browsers silently reject the @font-face src.
          */
         @font-face {
             font-family: 'Inter';
@@ -92,52 +86,34 @@
             background-color: var(--landing-bg);
             color: var(--landing-text);
             overflow-x: hidden;
-            /* Inter renders crisper with antialiasing */
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
 
-        /*
-         * Type scale — applied globally for landing sections.
-         *
-         * Large headings (Hero h1, section titles) benefit from:
-         *   - negative letter-spacing: tightens the optically-loose gap
-         *     between characters at large sizes (Inter's default spacing
-         *     is tuned for body text, not 56–80px display use)
-         *   - tight line-height: prevents too much vertical air in
-         *     multi-line headlines
-         *
-         * These are defined as CSS custom properties so individual
-         * sections can reference them without scattering magic numbers.
-         */
+        /* Type scale — kept as custom props so sections share the same tuning */
         :root {
-            --type-display-tracking: -0.03em;   /* hero h1, large titles  */
-            --type-heading-tracking: -0.02em;   /* section h2 headings    */
-            --type-display-leading:  1.05;      /* hero h1 line-height    */
-            --type-heading-leading:  1.15;      /* section h2 line-height */
-            --type-body-leading:     1.6;       /* paragraphs             */
+            --type-display-tracking: -0.03em;
+            --type-heading-tracking: -0.02em;
+            --type-display-leading:  1.05;
+            --type-heading-leading:  1.15;
+            --type-body-leading:     1.6;
         }
 
-        /* Display heading — Hero h1 */
         .type-display {
             letter-spacing: var(--type-display-tracking);
             line-height:    var(--type-display-leading);
-            font-variation-settings: 'wght' 800;   /* variable font axis */
+            font-variation-settings: 'wght' 800;
         }
-
-        /* Section headings */
         .type-heading {
             letter-spacing: var(--type-heading-tracking);
             line-height:    var(--type-heading-leading);
             font-variation-settings: 'wght' 700;
         }
-
-        /* Body / paragraph text */
         .type-body {
             line-height: var(--type-body-leading);
         }
 
-        /* ── Scroll-triggered base state ── */
+        /* Scroll-triggered base state */
         [data-reveal] {
             opacity: 0;
             transform: translateY(28px);
@@ -154,7 +130,6 @@
         [data-reveal-delay="5"] { transition-delay: 0.5s; }
         [data-reveal-delay="6"] { transition-delay: 0.6s; }
 
-        /* ── Gradient text utility ── */
         .text-gradient {
             background: linear-gradient(135deg, var(--landing-primary), var(--landing-secondary), var(--landing-accent));
             -webkit-background-clip: text;
@@ -162,7 +137,6 @@
             background-clip: text;
         }
 
-        /* ── Glassmorphism utility ── */
         .glass {
             background: rgba(255,255,255,0.04);
             backdrop-filter: blur(16px);
@@ -170,47 +144,27 @@
             border: 1px solid var(--landing-border);
         }
 
-        /* ── Mobile nav panel — intentionally solid, never glass ── */
         /*
-         * Full-screen overlay that covers the entire viewport on every device:
-         *
-         * • 100dvh   — dynamic viewport height: shrinks/grows with the browser
-         *              chrome (address bar) on iOS Safari & Chrome mobile. This
-         *              prevents the panel being taller than the visible area.
-         * • 100vh    — fallback for browsers that don't support dvh yet
-         *              (Chrome < 108, Safari < 15.4, Firefox < 101).
-         * • safe-area padding — keeps content away from notch (top) and the
-         *              home-indicator bar (bottom) on notch / Dynamic Island
-         *              iPhones and similar Android devices.
-         *              Requires viewport-fit=cover in the <meta> tag (set above).
-         * • overflow-y: auto — makes the link list scrollable when the viewport
-         *              is short (e.g. landscape on iPhone SE / 8).
-         *
-         * The panel is position:fixed so it sits above the page in the stacking
-         * context and is unaffected by the page scroll position.
+         * Mobile nav panel — solid, never glass.
+         * 100dvh with 100vh fallback + safe-area padding for notch / home indicator.
+         * Requires viewport-fit=cover (set in the viewport meta above).
          */
         .nav-mobile-panel {
             position: fixed;
             inset: 0;
-            z-index: 40; /* below the navbar header (z-50) so the topbar stays visible */
+            z-index: 40;
             background: #0d0d15;
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
-
-            /* dvh with vh fallback */
             height: 100vh;
             height: 100dvh;
-
-            /* Safe-area insets for notch / Dynamic Island / home-indicator */
-            padding-top: calc(4rem + env(safe-area-inset-top));    /* 4rem = navbar height */
+            padding-top: calc(4rem + env(safe-area-inset-top));
             padding-bottom: env(safe-area-inset-bottom, 1rem);
             padding-left: env(safe-area-inset-left, 0px);
             padding-right: env(safe-area-inset-right, 0px);
         }
 
-        /* Reduce backdrop-filter cost on low-end / small-screen devices.
-           Devices that hint at reduced motion typically have lower GPU budgets
-           too; we keep the border/bg tint so the card still reads as "glass". */
+        /* Cheap blur on low-end / small screens: keep the tint, drop the cost */
         @media (prefers-reduced-motion: reduce) {
             .glass {
                 backdrop-filter: none;
@@ -218,26 +172,18 @@
                 background: rgba(255,255,255,0.07);
             }
         }
-
-        /* On very small viewports the blur compositor layer can cause scroll
-           jank. Disable blur below 640 px (sm breakpoint) where GPU is
-           most constrained, while keeping the semi-transparent surface. */
         @media (max-width: 639px) {
             .glass {
                 backdrop-filter: none;
                 -webkit-backdrop-filter: none;
                 background: rgba(255,255,255,0.07);
             }
-
-            /* Navbar also uses Tailwind backdrop-blur-xl via :class binding.
-               Override it on mobile to avoid compositor jank. */
             header[x-data] {
                 backdrop-filter: none !important;
                 -webkit-backdrop-filter: none !important;
             }
         }
 
-        /* ── Glow utilities ── */
         .glow-primary {
             box-shadow: 0 0 40px var(--landing-glow);
         }
@@ -245,7 +191,6 @@
             text-shadow: 0 0 40px rgba(99, 102, 241, 0.6);
         }
 
-        /* ── Ambient blobs ── */
         .ambient-blob {
             position: absolute;
             border-radius: 9999px;
@@ -303,9 +248,7 @@
 
 <body x-data x-cloak>
 
-    {{-- ─────────────────────────────────────────────────────── --}}
-    {{-- Slot: full page content injected by Livewire component  --}}
-    {{-- ─────────────────────────────────────────────────────── --}}
+    {{-- Slot: full page content injected by Livewire component --}}
     {{ $slot }}
 
     @livewireScripts

@@ -29,31 +29,29 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // اتصال Actions ماژول Auth به Fortify
+        // اتصال Actions و views ماژول Auth به Fortify
         Fortify::createUsersUsing(CreateNewUser::class);
         Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
         Fortify::redirectUserForTwoFactorAuthenticationUsing(RedirectIfTwoFactorAuthenticatable::class);
 
-        // اتصال views Fortify به ماژول Auth
         Fortify::loginView(fn () => view('auth::livewire.login'));
         Fortify::registerView(fn () => view('auth::livewire.register'));
         Fortify::requestPasswordResetLinkView(fn () => view('auth::livewire.forgot-password'));
         Fortify::resetPasswordView(fn ($request) => view('auth::livewire.reset-password', ['request' => $request]));
         Fortify::verifyEmailView(fn () => view('auth::livewire.verify-email'));
 
-        // Rate limiting
         RateLimiter::for('login', function (Request $request) {
             $throttleKey = Str::transliterate(
                 Str::lower($request->input(Fortify::username())).'|'.$request->ip()
             );
 
-            return Limit::perMinute(5)->by($throttleKey);
+            return Limit::perMinute((int) config('auth.limits.login_max'))->by($throttleKey);
         });
 
         RateLimiter::for('two-factor', function (Request $request) {
-            return Limit::perMinute(5)->by($request->session()->get('login.id'));
+            return Limit::perMinute((int) config('auth.limits.two_factor_max'))->by($request->session()->get('login.id'));
         });
     }
 }

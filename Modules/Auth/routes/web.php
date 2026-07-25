@@ -13,13 +13,9 @@ use Modules\Auth\Http\Livewire\ResetPassword;
 | Auth Module Web Routes
 |--------------------------------------------------------------------------
 |
-| Fortify به‌صورت خودکار routes اصلی (POST /login, POST /register, ...)
-| را register می‌کنه. اینجا فقط GET views را map می‌کنیم که Fortify
-| از ما می‌خواد.
-|
-| نکته: Fortify::loginView() و بقیه در FortifyServiceProvider تنظیم شدن
-| و به view های این ماژول اشاره دارن. این routes برای Livewire full-page
-| component ها هستند.
+| Fortify routes اصلی (POST /login, POST /register, ...) را خودش ثبت می‌کند؛
+| اینجا فقط GET viewهای مورد نیاز Fortify و Livewire full-page componentها
+| را تعریف می‌کنیم. Viewها در FortifyServiceProvider متصل شده‌اند.
 |
 */
 
@@ -33,25 +29,25 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/home', fn () => redirect()->route('admin.dashboard'))->name('home');
 
-    // Profile — available to every authenticated user (not admin-only).
+    // Profile — accessible to every authenticated user (not admin-only).
     Route::get('/profile', Profile::class)->name('profile');
 
-    // Logout: POST to preserve CSRF protection, then redirect to landing.
+    // Logout via POST to keep CSRF protection.
     Route::post('/logout', function () {
-        Auth::guard('web')->logout();
+        Auth::guard(config('fortify.guard'))->logout();
         request()->session()->invalidate();
         request()->session()->regenerateToken();
 
-        return redirect()->route('landing');
+        return redirect()->route(config('auth.redirects.after_logout'));
     })->name('logout');
 });
 
-// Gentelella's built-in JS hardcodes "login.html" as the Sign Out destination.
-// This route catches that GET request, logs the user out properly, and
-// redirects to /login — no JavaScript patching needed.
+// Gentelella's JS hardcodes "login.html" as the Sign-Out target; this
+// catches it, logs the user out, and redirects to /login.
 Route::get('/login.html', function () {
-    Auth::guard('web')->logout();
+    Auth::guard(config('fortify.guard'))->logout();
     request()->session()->invalidate();
     request()->session()->regenerateToken();
-    return redirect('/login');
+
+    return redirect()->route(config('auth.redirects.guest'));
 })->name('gentelella.logout');

@@ -4,12 +4,10 @@ namespace Modules\Landing\Http\Livewire;
 
 use Illuminate\Support\Collection;
 use Livewire\Attributes\Layout;
-use Livewire\Attributes\Title;
 use Livewire\Component;
 use Modules\Core\Contracts\GifShowcaseInterface;
 
 #[Layout('landing::layouts.landing')]
-#[Title('GIF Manager — Organize, Share & Discover GIFs')]
 class Landing extends Component
 {
     /** @var Collection<int, object> */
@@ -17,10 +15,8 @@ class Landing extends Component
 
     public function boot(GifShowcaseInterface $showcase): void
     {
-        // Resolved via Core's container binding → GifShowcaseService.
-        // Returns an empty collection when no GIFs exist yet, so the
-        // Showcase section gracefully falls back to placeholder cards.
-        $this->showcaseGifs = $showcase->latestGifs(8);
+        // Empty collection when there's nothing yet — showcase falls back to placeholders.
+        $this->showcaseGifs = $showcase->latestGifs(config('landing.showcase.count', 8));
     }
 
     public function render()
