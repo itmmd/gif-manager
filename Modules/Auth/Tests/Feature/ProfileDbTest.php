@@ -3,11 +3,6 @@
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-/**
- * Profile Page Tests (DB required — pdo_sqlite)
- * Run with: vendor/bin/pest --group=db
- */
-
 uses(RefreshDatabase::class);
 
 beforeEach(function () {
@@ -52,5 +47,5 @@ it('landing navbar profile link points to /profile for authenticated user', func
 
     $this->actingAs($user)
          ->get('/')
-         ->assertSee('href="' . route('profile') . '"', escape: false);
+         ->assertSee('href="'.route('profile').'"', escape: false);
 })->group('db');

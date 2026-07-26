@@ -23,10 +23,6 @@ class Register extends Component
 
     public string $password_confirmation = '';
 
-    /**
-     * Password rule kept here (not in a #[Validate] attribute) so the min
-     * length can be centralised in config('auth.password.min_length').
-     */
     protected function rules(): array
     {
         return [

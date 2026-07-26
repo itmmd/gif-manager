@@ -8,10 +8,6 @@ use Illuminate\Support\Facades\Hash;
 
 class AdminUserSeeder extends Seeder
 {
-    /**
-     * Idempotent: updateOrCreate an admin from config('auth.admin.*').
-     * Read via config (not env()) so it stays correct after `config:cache`.
-     */
     public function run(): void
     {
         $user = User::updateOrCreate(

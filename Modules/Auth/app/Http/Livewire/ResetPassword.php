@@ -26,10 +26,6 @@ class ResetPassword extends Component
 
     public string $errorMessage = '';
 
-    /**
-     * Password rule kept here (not in a #[Validate] attribute) so the min
-     * length can be centralised in config('auth.password.min_length').
-     */
     protected function rules(): array
     {
         return [
@@ -63,7 +59,7 @@ class ResetPassword extends Component
         );
 
         if ($status === Password::PASSWORD_RESET) {
-            $this->redirect(route('login').'?reset=1', navigate: false);
+            $this->redirect(route(config('auth.redirects.guest')).'?reset=1', navigate: false);
         } else {
             $this->errorMessage = __($status);
         }

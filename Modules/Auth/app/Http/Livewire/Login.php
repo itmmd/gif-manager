@@ -51,8 +51,6 @@ class Login extends Component
         RateLimiter::clear($key);
         session()->regenerate();
 
-        // navigate:false forces a full reload so the new session cookie
-        // is picked up by every component (e.g. the navbar).
         $this->redirect(route(config('auth.redirects.after_login')), navigate: false);
     }
 

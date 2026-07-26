@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="{{ in_array(app()->getLocale(), ['fa', 'ar', 'he', 'ur']) ? 'rtl' : 'ltr' }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,10 +8,8 @@
 
     <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
 
-    {{-- Tailwind CSS (main app build — no admin-assets) --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    {{-- Livewire styles --}}
     @livewireStyles
 </head>
 <body class="min-h-screen bg-gray-50 text-gray-900 antialiased">
@@ -20,7 +18,6 @@
         {{ $slot }}
     </main>
 
-    {{-- Livewire scripts --}}
     @livewireScripts
 
 </body>

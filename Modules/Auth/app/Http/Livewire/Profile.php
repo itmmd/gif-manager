@@ -31,10 +31,6 @@ class Profile extends Component
 
     public bool $passwordSaved = false;
 
-    /**
-     * Password rule kept here (not in a #[Validate] attribute) so the min
-     * length can be centralised in config('auth.password.min_length').
-     */
     protected function rules(): array
     {
         return [

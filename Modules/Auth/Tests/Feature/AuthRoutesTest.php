@@ -3,7 +3,6 @@
 use Illuminate\Routing\Router;
 
 beforeEach(function () {
-    // Disable Vite manifest resolution so tests pass without running `npm run build`.
     $this->withoutVite();
 });
 
@@ -24,8 +23,6 @@ it('login page contains form', function () {
 });
 
 it('authenticated user is redirected from login', function () {
-    // Note: tests with database require pdo_sqlite extension.
-    // Verifying redirect behavior via middleware reflection instead.
     $middleware = app(Router::class)
         ->getRoutes()
         ->getByName('login')

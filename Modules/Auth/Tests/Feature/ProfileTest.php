@@ -2,13 +2,6 @@
 
 use Illuminate\Routing\Router;
 
-/**
- * Profile Page Tests (No DB required)
- * -----------------------------------------------------------------------
- * Route config, middleware, guest redirect — all without pdo_sqlite.
- * DB-dependent tests live in ProfileDbTest.php.
- */
-
 beforeEach(function () {
     $this->withoutVite();
 });
