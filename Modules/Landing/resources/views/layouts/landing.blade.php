@@ -1,9 +1,9 @@
 @php
-    $seo        = config('landing.seo');
-    $siteTitle  = $title ?? $seo['title'];
-    $siteDesc   = $description ?? $seo['description'];
-    $keywords   = $keywords ?? $seo['keywords'];
-    $ogImage    = $seo['og_image'];
+    $seo       = config('landing.seo');
+    $siteTitle = $title ?? $seo['title'];
+    $siteDesc  = $description ?? $seo['description'];
+    $keywords  = $keywords ?? $seo['keywords'];
+    $ogImage   = $seo['og_image'];
 @endphp
 
 <!DOCTYPE html>
@@ -13,14 +13,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    {{-- SEO: Primary --}}
     <title>{{ $siteTitle }}</title>
     <meta name="description" content="{{ $siteDesc }}">
     <meta name="keywords" content="{{ $keywords }}">
     <meta name="robots" content="{{ $seo['robots'] }}">
     <link rel="canonical" href="{{ url()->current() }}">
 
-    {{-- SEO: Open Graph --}}
     <meta property="og:type" content="{{ $seo['og_type'] }}">
     <meta property="og:title" content="{{ $siteTitle }}">
     <meta property="og:description" content="{{ $siteDesc }}">
@@ -30,29 +28,20 @@
     <meta property="og:image:height" content="{{ $ogImage['height'] }}">
     <meta property="og:site_name" content="{{ config('app.name') }}">
 
-    {{-- SEO: Twitter Card --}}
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="{{ $siteTitle }}">
     <meta name="twitter:description" content="{{ $siteDesc }}">
     <meta name="twitter:image" content="{{ asset('images/og-image.png') }}">
 
-    {{-- Favicon --}}
     <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
     <link rel="apple-touch-icon" href="{{ asset('images/apple-touch-icon.png') }}">
 
-    {{-- Tailwind CSS + Alpine.js (main app build) --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    {{-- Landing-specific CSS custom properties & dark theme default --}}
     <style>
-        /*
-         * Inter is declared here (not in app.css) so Vite's minifier won't
-         * strip the required space between url() and format() — without it
-         * browsers silently reject the @font-face src.
-         */
         @font-face {
             font-family: 'Inter';
-            font-style:  normal;
+            font-style: normal;
             font-weight: 100 900;
             font-display: swap;
             src: url('/fonts/inter/inter-latin-variable.woff2') format('woff2-variations');
@@ -61,14 +50,13 @@
                            U+2000-206F, U+2074, U+20AC, U+2122, U+2191,
                            U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
         }
+
         :root {
-            /* Brand gradient palette */
-            --landing-primary:   #6366f1;   /* indigo-500  */
-            --landing-secondary: #8b5cf6;   /* violet-500  */
-            --landing-accent:    #06b6d4;   /* cyan-500    */
+            --landing-primary:   #6366f1;
+            --landing-secondary: #8b5cf6;
+            --landing-accent:    #06b6d4;
             --landing-glow:      rgba(99, 102, 241, 0.35);
 
-            /* Surface colours (dark theme is default) */
             --landing-bg:        #0a0a0f;
             --landing-surface:   #111118;
             --landing-surface-2: #1a1a24;
@@ -76,8 +64,13 @@
             --landing-text:      #f1f5f9;
             --landing-text-muted:#94a3b8;
 
-            /* Typography */
             --font-landing: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+            --type-display-tracking: -0.03em;
+            --type-heading-tracking: -0.02em;
+            --type-display-leading:  1.05;
+            --type-heading-leading:  1.15;
+            --type-body-leading:     1.6;
         }
 
         * { font-family: var(--font-landing); }
@@ -90,39 +83,33 @@
             -moz-osx-font-smoothing: grayscale;
         }
 
-        /* Type scale — kept as custom props so sections share the same tuning */
-        :root {
-            --type-display-tracking: -0.03em;
-            --type-heading-tracking: -0.02em;
-            --type-display-leading:  1.05;
-            --type-heading-leading:  1.15;
-            --type-body-leading:     1.6;
-        }
-
         .type-display {
             letter-spacing: var(--type-display-tracking);
             line-height:    var(--type-display-leading);
             font-variation-settings: 'wght' 800;
         }
+
         .type-heading {
             letter-spacing: var(--type-heading-tracking);
             line-height:    var(--type-heading-leading);
             font-variation-settings: 'wght' 700;
         }
+
         .type-body {
             line-height: var(--type-body-leading);
         }
 
-        /* Scroll-triggered base state */
         [data-reveal] {
             opacity: 0;
             transform: translateY(28px);
             transition: opacity 0.6s ease, transform 0.6s ease;
         }
+
         [data-reveal].is-visible {
             opacity: 1;
             transform: translateY(0);
         }
+
         [data-reveal-delay="1"] { transition-delay: 0.1s; }
         [data-reveal-delay="2"] { transition-delay: 0.2s; }
         [data-reveal-delay="3"] { transition-delay: 0.3s; }
@@ -144,11 +131,6 @@
             border: 1px solid var(--landing-border);
         }
 
-        /*
-         * Mobile nav panel — solid, never glass.
-         * 100dvh with 100vh fallback + safe-area padding for notch / home indicator.
-         * Requires viewport-fit=cover (set in the viewport meta above).
-         */
         .nav-mobile-panel {
             position: fixed;
             inset: 0;
@@ -164,7 +146,6 @@
             padding-right: env(safe-area-inset-right, 0px);
         }
 
-        /* Cheap blur on low-end / small screens: keep the tint, drop the cost */
         @media (prefers-reduced-motion: reduce) {
             .glass {
                 backdrop-filter: none;
@@ -172,6 +153,7 @@
                 background: rgba(255,255,255,0.07);
             }
         }
+
         @media (max-width: 639px) {
             .glass {
                 backdrop-filter: none;
@@ -184,12 +166,8 @@
             }
         }
 
-        .glow-primary {
-            box-shadow: 0 0 40px var(--landing-glow);
-        }
-        .glow-text-primary {
-            text-shadow: 0 0 40px rgba(99, 102, 241, 0.6);
-        }
+        .glow-primary      { box-shadow: 0 0 40px var(--landing-glow); }
+        .glow-text-primary { text-shadow: 0 0 40px rgba(99, 102, 241, 0.6); }
 
         .ambient-blob {
             position: absolute;
@@ -204,7 +182,6 @@
 
     {{ $styles ?? '' }}
 
-    {{-- Alpine.js global scroll store — initialised before components mount --}}
     <script>
         document.addEventListener('alpine:init', () => {
             Alpine.store('scroll', {
@@ -223,7 +200,6 @@
         });
     </script>
 
-    {{-- Intersection Observer: activates [data-reveal] elements on scroll --}}
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const io = new IntersectionObserver((entries) => {
@@ -237,10 +213,10 @@
 
             document.querySelectorAll('[data-reveal]').forEach(el => io.observe(el));
 
-            // Re-run for elements added later (Livewire lazy loads, etc.)
             const mo = new MutationObserver(() => {
                 document.querySelectorAll('[data-reveal]:not(.is-visible)').forEach(el => io.observe(el));
             });
+
             mo.observe(document.body, { childList: true, subtree: true });
         });
     </script>
@@ -248,7 +224,6 @@
 
 <body x-data x-cloak>
 
-    {{-- Slot: full page content injected by Livewire component --}}
     {{ $slot }}
 
     @livewireScripts

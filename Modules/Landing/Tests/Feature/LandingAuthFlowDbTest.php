@@ -3,25 +3,11 @@
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-/**
- * Landing Page — Auth Flow Tests (DB required)
- * -----------------------------------------------------------------------
- * These tests use User::factory() and require pdo_sqlite (or a real DB).
- *
- * Run with: vendor/bin/pest --group=db
- * Skip DB tests: vendor/bin/pest --exclude-group=db
- *
- * In CI (GitHub Actions), pdo_sqlite is listed in the workflow extensions,
- * so all tests including this file will run.
- */
-
 uses(RefreshDatabase::class);
 
 beforeEach(function () {
     $this->withoutVite();
 });
-
-// ── isAdmin() helper ──────────────────────────────────────────────────────
 
 it('User isAdmin returns true for admin role', function () {
     $admin = User::factory()->admin()->create();
@@ -34,8 +20,6 @@ it('User isAdmin returns false for regular user role', function () {
 
     expect($user->isAdmin())->toBeFalse();
 })->group('db');
-
-// ── Navbar auth state ─────────────────────────────────────────────────────
 
 it('authenticated admin sees panel entry link in navbar', function () {
     $admin = User::factory()->admin()->create();
@@ -77,8 +61,6 @@ it('authenticated user sees logout form in navbar', function () {
          ->assertSee('action="' . route('logout') . '"', escape: false);
 })->group('db');
 
-// ── Logout ────────────────────────────────────────────────────────────────
-
 it('logout POST redirects to landing page', function () {
     $user = User::factory()->create();
 
@@ -95,8 +77,6 @@ it('user is unauthenticated after logout', function () {
     $this->assertGuest();
 })->group('db');
 
-// ── Admin panel access control ────────────────────────────────────────────
-
 it('admin can access admin panel', function () {
     $admin = User::factory()->admin()->create();
 
@@ -112,8 +92,6 @@ it('regular user is blocked from admin panel with 403', function () {
          ->get('/admin')
          ->assertStatus(403);
 })->group('db');
-
-// ── Login ─────────────────────────────────────────────────────────────────
 
 it('successful login via Fortify POST authenticates the user', function () {
     $admin = User::factory()->admin()->create([

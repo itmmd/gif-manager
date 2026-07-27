@@ -10,12 +10,10 @@ use Modules\Core\Contracts\GifShowcaseInterface;
 #[Layout('landing::layouts.landing')]
 class Landing extends Component
 {
-    /** @var Collection<int, object> */
     public Collection $showcaseGifs;
 
     public function boot(GifShowcaseInterface $showcase): void
     {
-        // Empty collection when there's nothing yet — showcase falls back to placeholders.
         $this->showcaseGifs = $showcase->latestGifs(config('landing.showcase.count', 8));
     }
 

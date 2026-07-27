@@ -1,6 +1,4 @@
 <div>
-
-    {{-- Fixed glassmorphism header, shared across all sections --}}
     <x-landing::navbar />
 
     @include('landing::sections.hero')
@@ -12,5 +10,4 @@
     @include('landing::sections.faq')
     @include('landing::sections.cta')
     @include('landing::sections.footer')
-
 </div>

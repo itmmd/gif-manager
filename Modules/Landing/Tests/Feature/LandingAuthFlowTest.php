@@ -2,21 +2,9 @@
 
 use Illuminate\Routing\Router;
 
-/**
- * Landing Page — Auth Flow Tests (No DB required)
- * -----------------------------------------------------------------------
- * These tests verify the auth flow for the Landing page without needing
- * a database. They check routing, middleware config, and guest HTML.
- *
- * DB-dependent tests (actingAs with factory users) live in
- * LandingAuthFlowDbTest.php and require pdo_sqlite to run.
- */
-
 beforeEach(function () {
     $this->withoutVite();
 });
-
-// ── Guest experience ──────────────────────────────────────────────────────
 
 it('landing page is accessible to guests', function () {
     $this->get('/')->assertStatus(200);
@@ -37,8 +25,6 @@ it('landing page does not show admin panel link for guests', function () {
 it('landing page has csrf meta token', function () {
     $this->get('/')->assertSee('csrf-token', escape: false);
 });
-
-// ── Route configuration ───────────────────────────────────────────────────
 
 it('login route exists with correct name', function () {
     $route = app(Router::class)->getRoutes()->getByName('login');

@@ -2,11 +2,6 @@
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-/**
- * Gallery Page Tests (DB required — pdo_sqlite)
- * Run with: vendor/bin/pest --group=db
- */
-
 uses(RefreshDatabase::class);
 
 beforeEach(function () {

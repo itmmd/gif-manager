@@ -1,6 +1,4 @@
-@props([
-    'links' => null,
-])
+@props(['links' => null])
 
 @php $links = $links ?? config('landing.nav'); @endphp
 
@@ -12,10 +10,10 @@ document.addEventListener('alpine:init', () => {
 
         openMenu() {
             this._scrollY = window.scrollY;
-            document.body.style.overflow = 'hidden';
-            document.body.style.position = 'fixed';
-            document.body.style.top      = '-' + this._scrollY + 'px';
-            document.body.style.width    = '100%';
+            document.body.style.overflow  = 'hidden';
+            document.body.style.position  = 'fixed';
+            document.body.style.top       = '-' + this._scrollY + 'px';
+            document.body.style.width     = '100%';
             this.mobileOpen = true;
             this.$nextTick(() => {
                 const first = this.$refs.panel.querySelector('a, button');
@@ -25,10 +23,10 @@ document.addEventListener('alpine:init', () => {
 
         closeMenu() {
             this.mobileOpen = false;
-            document.body.style.overflow = '';
-            document.body.style.position = '';
-            document.body.style.top      = '';
-            document.body.style.width    = '';
+            document.body.style.overflow  = '';
+            document.body.style.position  = '';
+            document.body.style.top       = '';
+            document.body.style.width     = '';
             window.scrollTo({ top: this._scrollY, behavior: 'instant' });
             this.$nextTick(() => this.$refs.hamburger.focus());
         },
@@ -66,7 +64,6 @@ document.addEventListener('alpine:init', () => {
 >
     <nav class="mx-auto flex h-16 max-w-7xl items-center justify-between px-6 lg:px-8">
 
-        {{-- Logo --}}
         <a href="{{ route('landing') }}" class="group flex items-center gap-2.5 shrink-0">
             <span class="relative flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 via-violet-500 to-cyan-500 shadow-lg shadow-indigo-500/30 transition-transform duration-300 group-hover:scale-110">
                 <svg class="h-5 w-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -78,28 +75,19 @@ document.addEventListener('alpine:init', () => {
             </span>
         </a>
 
-        {{-- Desktop center nav --}}
         <div class="hidden lg:flex items-center gap-1">
             @foreach ($links as $link)
-                <a
-                    href="{{ $link['href'] }}"
-                    class="relative rounded-lg px-4 py-2 text-sm font-medium text-slate-300 transition-colors duration-200 hover:text-white"
-                >
+                <a href="{{ $link['href'] }}" class="relative rounded-lg px-4 py-2 text-sm font-medium text-slate-300 transition-colors duration-200 hover:text-white">
                     {{ $link['label'] }}
                 </a>
             @endforeach
-            <a
-                href="{{ route('gifs.index') }}"
-                class="relative rounded-lg px-4 py-2 text-sm font-medium text-slate-300 transition-colors duration-200 hover:text-white"
-            >
+            <a href="{{ route('gifs.index') }}" class="relative rounded-lg px-4 py-2 text-sm font-medium text-slate-300 transition-colors duration-200 hover:text-white">
                 Gallery
             </a>
         </div>
 
-        {{-- Desktop auth area --}}
         <div class="hidden lg:flex items-center gap-3 shrink-0">
             @auth
-                {{-- Logged-in: user dropdown --}}
                 <div class="relative" x-data="{ open: false }">
                     <button
                         type="button"
@@ -118,7 +106,6 @@ document.addEventListener('alpine:init', () => {
                         </svg>
                     </button>
 
-                    {{-- Dropdown panel --}}
                     <div
                         x-show="open"
                         x-cloak
@@ -134,11 +121,7 @@ document.addEventListener('alpine:init', () => {
                         aria-orientation="vertical"
                     >
                         @if(auth()->user()->isAdmin())
-                            <a
-                                href="{{ route('admin.dashboard') }}"
-                                class="flex items-center gap-2.5 px-4 py-2.5 text-sm text-slate-200 transition-colors hover:bg-white/5 hover:text-white"
-                                role="menuitem"
-                            >
+                            <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2.5 px-4 py-2.5 text-sm text-slate-200 transition-colors hover:bg-white/5 hover:text-white" role="menuitem">
                                 <svg class="h-4 w-4 text-indigo-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/>
                                 </svg>
@@ -147,11 +130,7 @@ document.addEventListener('alpine:init', () => {
                             <div class="my-1 border-t border-white/10" role="separator"></div>
                         @endif
 
-                        <a
-                            href="{{ route('profile') }}"
-                            class="flex items-center gap-2.5 px-4 py-2.5 text-sm text-slate-300 transition-colors hover:bg-white/5 hover:text-white"
-                            role="menuitem"
-                        >
+                        <a href="{{ route('profile') }}" class="flex items-center gap-2.5 px-4 py-2.5 text-sm text-slate-300 transition-colors hover:bg-white/5 hover:text-white" role="menuitem">
                             <svg class="h-4 w-4 text-slate-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                             </svg>
@@ -162,11 +141,7 @@ document.addEventListener('alpine:init', () => {
 
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
-                            <button
-                                type="submit"
-                                class="flex w-full items-center gap-2.5 px-4 py-2.5 text-sm text-slate-300 transition-colors hover:bg-white/5 hover:text-rose-400"
-                                role="menuitem"
-                            >
+                            <button type="submit" class="flex w-full items-center gap-2.5 px-4 py-2.5 text-sm text-slate-300 transition-colors hover:bg-white/5 hover:text-rose-400" role="menuitem">
                                 <svg class="h-4 w-4 text-slate-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
                                 </svg>
@@ -176,24 +151,16 @@ document.addEventListener('alpine:init', () => {
                     </div>
                 </div>
             @else
-                {{-- Guest: Sign in / Get Started --}}
-                <a
-                    href="{{ route('login') }}"
-                    class="rounded-lg px-4 py-2 text-sm font-medium text-slate-300 transition-colors duration-200 hover:text-white"
-                >
+                <a href="{{ route('login') }}" class="rounded-lg px-4 py-2 text-sm font-medium text-slate-300 transition-colors duration-200 hover:text-white">
                     Sign in
                 </a>
-                <a
-                    href="{{ route('register') }}"
-                    class="group relative rounded-lg bg-gradient-to-r from-indigo-500 to-violet-500 px-5 py-2 text-sm font-semibold text-white shadow-lg shadow-indigo-500/30 transition-all duration-200 hover:shadow-indigo-500/50 hover:-translate-y-0.5"
-                >
+                <a href="{{ route('register') }}" class="group relative rounded-lg bg-gradient-to-r from-indigo-500 to-violet-500 px-5 py-2 text-sm font-semibold text-white shadow-lg shadow-indigo-500/30 transition-all duration-200 hover:shadow-indigo-500/50 hover:-translate-y-0.5">
                     Get Started
                     <span class="ml-1 inline-block transition-transform duration-200 group-hover:translate-x-0.5">→</span>
                 </a>
             @endauth
         </div>
 
-        {{-- Mobile hamburger — min 44×44 px (WCAG 2.5.5) --}}
         <button
             x-ref="hamburger"
             type="button"
@@ -211,7 +178,6 @@ document.addEventListener('alpine:init', () => {
         </button>
     </nav>
 
-    {{-- Mobile full-screen overlay --}}
     <div
         x-ref="panel"
         id="mobile-nav-panel"
@@ -229,30 +195,17 @@ document.addEventListener('alpine:init', () => {
         aria-label="Navigation menu"
     >
         <div class="flex flex-col gap-1 px-6 py-6">
-
-            {{-- Nav links --}}
             @foreach ($links as $link)
-                <a
-                    href="{{ $link['href'] }}"
-                    @click="closeMenu()"
-                    class="flex min-h-[44px] items-center rounded-lg px-3 text-base font-medium text-slate-300 hover:bg-white/5 hover:text-white transition-colors"
-                >
+                <a href="{{ $link['href'] }}" @click="closeMenu()" class="flex min-h-[44px] items-center rounded-lg px-3 text-base font-medium text-slate-300 hover:bg-white/5 hover:text-white transition-colors">
                     {{ $link['label'] }}
                 </a>
             @endforeach
-            <a
-                href="{{ route('gifs.index') }}"
-                @click="closeMenu()"
-                class="flex min-h-[44px] items-center rounded-lg px-3 text-base font-medium text-slate-300 hover:bg-white/5 hover:text-white transition-colors"
-            >
+            <a href="{{ route('gifs.index') }}" @click="closeMenu()" class="flex min-h-[44px] items-center rounded-lg px-3 text-base font-medium text-slate-300 hover:bg-white/5 hover:text-white transition-colors">
                 Gallery
             </a>
 
-            {{-- Auth section --}}
             <div class="flex flex-col gap-2 pt-4 mt-4 border-t border-white/10">
-
                 @auth
-                    {{-- User info header --}}
                     <div class="flex items-center gap-3 px-3 py-2 mb-1">
                         <span class="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-violet-500 text-sm font-bold text-white select-none shrink-0">
                             {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
@@ -264,11 +217,7 @@ document.addEventListener('alpine:init', () => {
                     </div>
 
                     @if(auth()->user()->isAdmin())
-                        <a
-                            href="{{ route('admin.dashboard') }}"
-                            @click="closeMenu()"
-                            class="flex min-h-[44px] items-center gap-2.5 rounded-lg px-3 text-sm font-medium text-indigo-300 ring-1 ring-indigo-500/30 hover:bg-indigo-500/10 transition-colors"
-                        >
+                        <a href="{{ route('admin.dashboard') }}" @click="closeMenu()" class="flex min-h-[44px] items-center gap-2.5 rounded-lg px-3 text-sm font-medium text-indigo-300 ring-1 ring-indigo-500/30 hover:bg-indigo-500/10 transition-colors">
                             <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/>
                             </svg>
@@ -276,11 +225,7 @@ document.addEventListener('alpine:init', () => {
                         </a>
                     @endif
 
-                    <a
-                        href="{{ route('profile') }}"
-                        @click="closeMenu()"
-                        class="flex min-h-[44px] items-center gap-2.5 rounded-lg px-3 text-sm font-medium text-slate-300 hover:bg-white/5 hover:text-white transition-colors"
-                    >
+                    <a href="{{ route('profile') }}" @click="closeMenu()" class="flex min-h-[44px] items-center gap-2.5 rounded-lg px-3 text-sm font-medium text-slate-300 hover:bg-white/5 hover:text-white transition-colors">
                         <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                         </svg>
@@ -289,34 +234,21 @@ document.addEventListener('alpine:init', () => {
 
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <button
-                            type="submit"
-                            class="flex w-full min-h-[44px] items-center gap-2.5 rounded-lg px-3 text-sm font-medium text-slate-300 hover:bg-white/5 hover:text-rose-400 transition-colors"
-                        >
+                        <button type="submit" class="flex w-full min-h-[44px] items-center gap-2.5 rounded-lg px-3 text-sm font-medium text-slate-300 hover:bg-white/5 hover:text-rose-400 transition-colors">
                             <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
                             </svg>
                             Sign out
                         </button>
                     </form>
-
                 @else
-                    <a
-                        href="{{ route('login') }}"
-                        @click="closeMenu()"
-                        class="flex min-h-[44px] items-center justify-center rounded-lg px-4 text-sm font-medium text-slate-200 ring-1 ring-white/10 hover:bg-white/5 transition-colors"
-                    >
+                    <a href="{{ route('login') }}" @click="closeMenu()" class="flex min-h-[44px] items-center justify-center rounded-lg px-4 text-sm font-medium text-slate-200 ring-1 ring-white/10 hover:bg-white/5 transition-colors">
                         Sign in
                     </a>
-                    <a
-                        href="{{ route('register') }}"
-                        @click="closeMenu()"
-                        class="flex min-h-[44px] items-center justify-center rounded-lg bg-gradient-to-r from-indigo-500 to-violet-500 px-4 text-sm font-semibold text-white shadow-lg shadow-indigo-500/30"
-                    >
+                    <a href="{{ route('register') }}" @click="closeMenu()" class="flex min-h-[44px] items-center justify-center rounded-lg bg-gradient-to-r from-indigo-500 to-violet-500 px-4 text-sm font-semibold text-white shadow-lg shadow-indigo-500/30">
                         Get Started
                     </a>
                 @endauth
-
             </div>
         </div>
     </div>

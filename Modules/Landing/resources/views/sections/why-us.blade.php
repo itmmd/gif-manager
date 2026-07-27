@@ -6,8 +6,6 @@
     class="relative overflow-hidden py-32"
     x-data
 >
-
-    {{-- Parallax background layer (moves slower than content) --}}
     <div
         class="pointer-events-none absolute inset-0 -z-10"
         :style="`transform: translateY(${$store.scroll.y * 0.12}px)`"
@@ -19,41 +17,23 @@
 
     <div class="relative z-10 mx-auto grid max-w-7xl items-center gap-16 px-6 lg:grid-cols-2 lg:px-8">
 
-        {{-- LEFT COLUMN: copy + benefit list --}}
         <div>
-            <p
-                data-reveal
-                class="glass mb-4 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-medium uppercase tracking-wider text-violet-300"
-            >
+            <p data-reveal class="glass mb-4 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-medium uppercase tracking-wider text-violet-300">
                 {{ $w['eyebrow'] }}
             </p>
 
-            <h2
-                data-reveal
-                data-reveal-delay="1"
-                class="text-4xl font-extrabold tracking-tight text-white sm:text-5xl"
-            >
+            <h2 data-reveal data-reveal-delay="1" class="text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
                 {{ $w['heading'] }}
                 <span class="text-gradient">{{ $w['heading_em'] }}</span>
             </h2>
 
-            <p
-                data-reveal
-                data-reveal-delay="2"
-                class="mt-5 max-w-xl text-lg leading-relaxed text-slate-400"
-            >
+            <p data-reveal data-reveal-delay="2" class="mt-5 max-w-xl text-lg leading-relaxed text-slate-400">
                 {{ $w['intro'] }}
             </p>
 
-            {{-- Benefit list with stagger reveal --}}
             <ul class="mt-10 space-y-6">
                 @foreach ($w['benefits'] as $i => $b)
-                    <li
-                        data-reveal
-                        data-reveal-delay="{{ min($i + 1, 6) }}"
-                        class="flex items-start gap-4"
-                    >
-                        {{-- Check badge --}}
+                    <li data-reveal data-reveal-delay="{{ min($i + 1, 6) }}" class="flex items-start gap-4">
                         <span class="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500/30 to-violet-500/20 ring-1 ring-inset ring-white/10">
                             <svg class="h-4 w-4 text-indigo-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                 <polyline points="20 6 9 17 4 12"/>
@@ -68,8 +48,6 @@
             </ul>
         </div>
 
-        {{-- RIGHT COLUMN: visual mockup with parallax --}}
-        {{-- Parallax disabled on mobile (<lg): stacked layout + translateY jitters on narrow screens --}}
         <div
             data-reveal
             data-reveal-delay="2"
@@ -77,16 +55,13 @@
             :style="window.innerWidth >= 1024 ? `transform: translateY(${$store.scroll.y * 0.06}px)` : ''"
         >
             <div class="glass relative overflow-hidden rounded-3xl p-2 shadow-2xl shadow-violet-500/10">
-                {{-- Faux app window chrome --}}
                 <div class="flex items-center gap-1.5 px-4 py-3">
                     <span class="h-3 w-3 rounded-full bg-red-500/60"></span>
                     <span class="h-3 w-3 rounded-full bg-yellow-500/60"></span>
                     <span class="h-3 w-3 rounded-full bg-green-500/60"></span>
                 </div>
 
-                {{-- Faux dashboard mockup (pure CSS) --}}
                 <div class="space-y-3 rounded-2xl bg-[#0d0d14] p-5">
-                    {{-- Search bar --}}
                     <div class="flex items-center gap-2 rounded-lg bg-white/5 px-3 py-2.5">
                         <svg class="h-4 w-4 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                             <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
@@ -94,7 +69,6 @@
                         <div class="h-3 w-40 rounded bg-gradient-to-r from-slate-700 to-slate-600/50"></div>
                     </div>
 
-                    {{-- GIF grid placeholder --}}
                     <div class="grid grid-cols-3 gap-3">
                         @foreach (['from-indigo-500/30 to-violet-500/10','from-violet-500/30 to-cyan-500/10','from-cyan-500/30 to-indigo-500/10','from-violet-500/30 to-indigo-500/10','from-cyan-500/30 to-violet-500/10','from-indigo-500/30 to-cyan-500/10'] as $g)
                             <div class="aspect-square rounded-lg bg-gradient-to-br {{ $g }} ring-1 ring-inset ring-white/5">
@@ -109,7 +83,6 @@
                         @endforeach
                     </div>
 
-                    {{-- Sidebar item row --}}
                     <div class="flex items-center gap-2 rounded-lg bg-white/5 px-3 py-2">
                         <div class="h-6 w-6 rounded-md bg-gradient-to-br from-indigo-500/40 to-violet-500/20"></div>
                         <div class="h-2.5 flex-1 rounded bg-slate-700/60"></div>
@@ -118,7 +91,6 @@
                 </div>
             </div>
 
-            {{-- Floating accent glow behind mockup --}}
             <div class="pointer-events-none absolute -inset-4 -z-10 rounded-3xl bg-gradient-to-tr from-indigo-500/10 via-violet-500/5 to-transparent blur-2xl" aria-hidden="true"></div>
         </div>
 
