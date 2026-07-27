@@ -6,27 +6,12 @@ use Modules\Gif\Http\Livewire\PublicGallery;
 use Modules\Gif\Http\Livewire\PublicShow;
 use Modules\Gif\Http\Livewire\UploadGif;
 
-/*
-|--------------------------------------------------------------------------
-| Gif Module — Public Routes (no auth required)
-|--------------------------------------------------------------------------
-*/
-Route::prefix('gifs')
-    ->name('gifs.')
-    ->group(function () {
-        Route::get('/',            PublicGallery::class)->name('index');
-        Route::get('/{gif:slug}',  PublicShow::class)->name('show');
-    });
+Route::prefix('gifs')->name('gifs.')->group(function () {
+    Route::get('/',           PublicGallery::class)->name('index');
+    Route::get('/{gif:slug}', PublicShow::class)->name('show');
+});
 
-/*
-|--------------------------------------------------------------------------
-| Gif Module — Admin Routes (auth + admin role required)
-|--------------------------------------------------------------------------
-*/
-Route::prefix('admin/gifs')
-    ->name('admin.gifs.')
-    ->middleware(['auth', 'admin'])
-    ->group(function () {
-        Route::get('/',       GifIndex::class)->name('index');
-        Route::get('/upload', UploadGif::class)->name('upload');
-    });
+Route::prefix('admin/gifs')->name('admin.gifs.')->middleware(['auth', 'admin'])->group(function () {
+    Route::get('/',       GifIndex::class)->name('index');
+    Route::get('/upload', UploadGif::class)->name('upload');
+});

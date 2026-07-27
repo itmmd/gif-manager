@@ -2,6 +2,7 @@
 
 namespace Modules\Gif\Http\Livewire;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
@@ -15,10 +16,8 @@ class GifIndex extends Component
 {
     use WithPagination;
 
-    /** ID of the GIF currently pending delete confirmation */
     public ?int $confirmDeleteId = null;
 
-    /** ID of the GIF whose AI suggestion is being previewed */
     public ?int $aiSuggestionId = null;
 
     public function confirmDelete(int $id): void
@@ -40,21 +39,16 @@ class GifIndex extends Component
             return;
         }
 
-        // Remove file from disk
         Storage::disk('public')->delete($gif->file_path);
-
-        // Remove DB record
         $gif->delete();
 
         $this->confirmDeleteId = null;
 
-        // If the current page is now empty, go back one page
         if ($this->page > 1 && Gif::paginate(12)->isEmpty()) {
             $this->previousPage();
         }
     }
 
-    /** Apply the AI suggested title to the GIF. */
     public function applyAiTitle(int $id): void
     {
         $gif = Gif::with('aiMetadata')->find($id);
@@ -63,9 +57,7 @@ class GifIndex extends Component
             return;
         }
 
-        // Direct update bypasses the slug-generation logic in the mutator
-        // (slug must not change on title update — existing URLs stay intact).
-        \DB::table('gifs')->where('id', $id)->update([
+        DB::table('gifs')->where('id', $id)->update([
             'title' => $gif->aiMetadata->suggested_title,
         ]);
 
@@ -80,9 +72,7 @@ class GifIndex extends Component
     public function render()
     {
         return view('gif::livewire.gif-index', [
-            'gifs' => Gif::with(['uploader', 'aiMetadata'])
-                         ->latest()
-                         ->paginate(12),
+            'gifs' => Gif::with(['uploader', 'aiMetadata'])->latest()->paginate(12),
         ]);
     }
 }

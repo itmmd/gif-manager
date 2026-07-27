@@ -1,7 +1,7 @@
 {
     "name": "Gif",
     "alias": "gif",
-    "description": "",
+    "description": "GIF upload, moderation, and public gallery",
     "keywords": [],
     "priority": 0,
     "providers": [

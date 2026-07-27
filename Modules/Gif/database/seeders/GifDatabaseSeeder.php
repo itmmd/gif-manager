@@ -6,11 +6,5 @@ use Illuminate\Database\Seeder;
 
 class GifDatabaseSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
-    public function run(): void
-    {
-        // $this->call([]);
-    }
+    public function run(): void {}
 }

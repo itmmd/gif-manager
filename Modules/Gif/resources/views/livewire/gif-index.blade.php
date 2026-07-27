@@ -1,4 +1,3 @@
-{{-- GIF Library index — Gentelella admin panel, Livewire 4 --}}
 <div>
     <div class="page-header">
         <div class="page-header-row">
@@ -15,7 +14,6 @@
         </div>
     </div>
 
-    {{-- ── Empty state ── --}}
     @if ($gifs->isEmpty())
         <div class="card">
             <div class="card-body empty-state">
@@ -31,23 +29,16 @@
         </div>
 
     @else
-        {{-- ── GIF grid ── --}}
         <div class="row">
             <div class="col-1">
                 <div class="media-grid">
                     @foreach ($gifs as $gif)
-                        <div
-                            class="media-tile"
-                            wire:key="gif-{{ $gif->id }}"
-                        >
-                            {{-- Thumbnail: GIF → img, MP4 → video --}}
+                        <div class="media-tile" wire:key="gif-{{ $gif->id }}">
+
                             @if ($gif->mime_type === 'video/mp4')
                                 <video
                                     src="{{ $gif->url }}"
-                                    muted
-                                    autoplay
-                                    loop
-                                    playsinline
+                                    muted autoplay loop playsinline
                                     style="width:100%; height:100%; object-fit:cover; display:block;"
                                     aria-label="{{ e($gif->title) }}"
                                 ></video>
@@ -60,7 +51,6 @@
                                 >
                             @endif
 
-                            {{-- Meta overlay --}}
                             <div class="meta">
                                 <span style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:120px;">
                                     {{ $gif->title }}
@@ -68,7 +58,6 @@
                                 <span>{{ $gif->formatted_size }}</span>
                             </div>
 
-                            {{-- AI status badge --}}
                             @if ($gif->isPendingReview())
                                 <div
                                     style="position:absolute; top:6px; left:6px; background:rgba(251,191,36,0.9); color:#000; border-radius:4px; font-size:10px; font-weight:600; padding:2px 6px; display:flex; align-items:center; gap:3px;"
@@ -86,7 +75,6 @@
                                     Flagged
                                 </div>
                             @elseif ($gif->aiMetadata?->suggested_title)
-                                {{-- AI suggestion available — show action button --}}
                                 <button
                                     wire:click="showAiSuggestion({{ $gif->id }})"
                                     style="position:absolute; top:6px; left:6px; background:rgba(99,102,241,0.9); color:#fff; border-radius:4px; font-size:10px; font-weight:600; padding:2px 6px; border:none; cursor:pointer; display:flex; align-items:center; gap:3px;"
@@ -98,7 +86,6 @@
                                 </button>
                             @endif
 
-                            {{-- AI suggestion panel (shown when aiSuggestionId matches) --}}
                             @if ($aiSuggestionId === $gif->id && $gif->aiMetadata?->suggested_title)
                                 <div
                                     style="position:absolute; inset:0; background:rgba(10,12,28,0.93); display:flex; flex-direction:column; gap:8px; padding:12px; overflow:auto;"
@@ -135,7 +122,6 @@
                                 </div>
                             @endif
 
-                            {{-- Delete: confirm overlay --}}
                             @if ($confirmDeleteId === $gif->id)
                                 <div
                                     style="position:absolute; inset:0; background:rgba(15,23,42,0.85); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; padding:12px;"
@@ -164,7 +150,6 @@
                                     </div>
                                 </div>
                             @else
-                                {{-- Delete trigger button --}}
                                 <button
                                     wire:click="confirmDelete({{ $gif->id }})"
                                     class="fm-item-menu"
@@ -176,7 +161,6 @@
                                 </button>
                             @endif
 
-                            {{-- Upload date (bottom-left) --}}
                             <div style="position:absolute; bottom:4px; left:8px; font-size:10px; color:rgba(255,255,255,0.55);">
                                 {{ $gif->created_at->format('M j, Y') }}
                             </div>
@@ -186,7 +170,6 @@
             </div>
         </div>
 
-        {{-- ── Pagination ── --}}
         @if ($gifs->hasPages())
             <div style="margin-top:16px;">
                 {{ $gifs->links() }}

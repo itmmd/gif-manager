@@ -1,20 +1,6 @@
 {
-    "name": "nwidart/gif",
-    "description": "",
-    "authors": [
-        {
-            "name": "Nicolas Widart",
-            "email": "n.widart@gmail.com"
-        }
-    ],
-    "extra": {
-        "laravel": {
-            "providers": [],
-            "aliases": {
-
-            }
-        }
-    },
+    "name": "modules/gif",
+    "description": "GIF management module",
     "autoload": {
         "psr-4": {
             "Modules\\Gif\\": "app/",
@@ -25,6 +11,12 @@
     "autoload-dev": {
         "psr-4": {
             "Modules\\Gif\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {}
         }
     }
 }

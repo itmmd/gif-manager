@@ -2,16 +2,7 @@
 
 use Illuminate\Routing\Router;
 
-/**
- * GIF Upload Validation — No-DB tests (always run)
- * -----------------------------------------------------------------------
- * Route config and middleware checks that don't touch the database.
- * DB-dependent upload/validation tests live in GifUploadValidationDbTest.php.
- */
-
 beforeEach(fn () => $this->withoutVite());
-
-// ── Route config ──────────────────────────────────────────────────────────
 
 it('upload route exists with correct name', function () {
     $route = app(Router::class)->getRoutes()->getByName('admin.gifs.upload');
@@ -40,8 +31,6 @@ it('upload route requires admin middleware', function () {
 it('guest is redirected to login when accessing upload page', function () {
     $this->get('/admin/gifs/upload')->assertRedirect('/login');
 });
-
-// ── Gif model validation rules ────────────────────────────────────────────
 
 it('Gif model strips HTML tags from title on set', function () {
     $gif = new \Modules\Gif\Models\Gif();

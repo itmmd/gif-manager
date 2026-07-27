@@ -2,17 +2,7 @@
 
 use Illuminate\Routing\Router;
 
-/**
- * PublicShow — No-DB tests (always run)
- * -----------------------------------------------------------------------
- * Verifies that the show route is correctly configured.
- * DB-dependent tests (actually opening a GIF detail page) live in
- * PublicShowDbTest.php.
- */
-
 beforeEach(fn () => $this->withoutVite());
-
-// ── Route config ──────────────────────────────────────────────────────────
 
 it('gifs.show route exists', function () {
     $route = app(Router::class)->getRoutes()->getByName('gifs.show');
@@ -21,12 +11,8 @@ it('gifs.show route exists', function () {
 });
 
 it('gifs.show route uses slug binding', function () {
-    $route = app(Router::class)->getRoutes()->getByName('gifs.show');
-
-    // The route URI must contain {gif:slug} or at minimum bind on slug.
-    // nWidart compiles it as /gifs/{gif}, but getRouteKeyName on Gif = 'slug'
-    // confirms slug binding is in effect.
     $model = new \Modules\Gif\Models\Gif();
+
     expect($model->getRouteKeyName())->toBe('slug');
 });
 

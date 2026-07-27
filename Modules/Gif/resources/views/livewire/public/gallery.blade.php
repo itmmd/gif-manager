@@ -1,7 +1,5 @@
-{{-- Public GIF Gallery — dark landing theme --}}
 <div>
 
-    {{-- ── Hero bar ── --}}
     <section class="relative overflow-hidden py-20 text-center">
         <div class="pointer-events-none absolute inset-0" aria-hidden="true"
              style="background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(99,102,241,0.18), transparent 65%);">
@@ -14,7 +12,6 @@
                 Browse and download free GIFs. No account required.
             </p>
 
-            {{-- Search --}}
             <div class="mx-auto mt-8 max-w-md">
                 <div class="relative">
                     <svg class="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
@@ -30,7 +27,6 @@
                     >
                 </div>
 
-                {{-- GIF Genie CTA — only rendered when Ai module is active --}}
                 @if ($genieAvailable)
                     <div class="mt-3 text-center">
                         <a href="{{ route('gifs.genie') }}@if($search)?genie={{ urlencode($search) }}@endif"
@@ -48,7 +44,6 @@
         </div>
     </section>
 
-    {{-- ── Grid ── --}}
     <section class="mx-auto max-w-7xl px-6 pb-24 lg:px-8">
 
         @if ($gifs->isEmpty())
@@ -60,18 +55,15 @@
                 <p class="text-lg font-semibold text-white">No GIFs found</p>
                 @if ($search)
                     <p class="mt-1 text-sm text-slate-400">No results for "<em>{{ e($search) }}</em>"</p>
-                    <button wire:click="$set('search','')"
-                            class="mt-4 text-sm text-indigo-400 hover:text-indigo-300">
+                    <button wire:click="$set('search','')" class="mt-4 text-sm text-indigo-400 hover:text-indigo-300">
                         Clear search
                     </button>
                 @endif
             </div>
 
         @else
-            {{-- Uniform grid — gif-card component ensures consistent sizing everywhere --}}
             <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6"
                  wire:loading.class="opacity-50">
-
                 @foreach ($gifs as $gif)
                     <x-gif::gif-card
                         :href="route('gifs.show', $gif)"
@@ -80,16 +72,15 @@
                         :mimeType="$gif->mime_type"
                     />
                 @endforeach
-
             </div>
 
-            {{-- Pagination --}}
             @if ($gifs->hasPages())
                 <div class="mt-12 flex justify-center">
                     {{ $gifs->links() }}
                 </div>
             @endif
         @endif
+
     </section>
 
 </div>

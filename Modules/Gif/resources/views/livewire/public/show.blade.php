@@ -1,8 +1,6 @@
-{{-- Public GIF detail page --}}
 <div>
     <div class="mx-auto max-w-5xl px-6 py-16 lg:px-8">
 
-        {{-- Back --}}
         <a href="{{ route('gifs.index') }}"
            class="mb-8 inline-flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors">
             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
@@ -13,17 +11,12 @@
 
         <div class="grid gap-10 lg:grid-cols-[1fr_280px]">
 
-            {{-- ── Main media ── --}}
             <div>
                 <div class="overflow-hidden rounded-2xl border border-white/8 bg-white/3">
                     @if ($gif->mime_type === 'video/mp4')
                         <video
                             src="{{ $gif->url }}"
-                            controls
-                            autoplay
-                            loop
-                            muted
-                            playsinline
+                            controls autoplay loop muted playsinline
                             class="w-full"
                             aria-label="{{ e($gif->title) }}"
                         ></video>
@@ -37,7 +30,6 @@
                 </div>
             </div>
 
-            {{-- ── Sidebar info + actions ── --}}
             <aside class="flex flex-col gap-6">
 
                 <div>
@@ -51,7 +43,6 @@
                     </p>
                 </div>
 
-                {{-- Download --}}
                 <a
                     href="{{ $gif->url }}"
                     download="{{ $gif->original_filename }}"
@@ -65,7 +56,6 @@
                     Download
                 </a>
 
-                {{-- Copy link --}}
                 <div x-data="{ copied: false }">
                     <p class="mb-1.5 text-xs font-medium uppercase tracking-wider text-slate-500">Direct link</p>
                     <div class="flex overflow-hidden rounded-lg border border-white/10">
@@ -94,7 +84,6 @@
             </aside>
         </div>
 
-        {{-- ── Related GIFs ── --}}
         @if ($related->isNotEmpty())
             <section class="mt-16">
                 <h2 class="mb-6 text-lg font-bold text-white">More GIFs</h2>

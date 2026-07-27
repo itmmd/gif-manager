@@ -3,16 +3,9 @@
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-/**
- * GIF Upload Validation — DB-dependent tests (require pdo_sqlite)
- * Run with: vendor/bin/pest --group=db
- */
-
 uses(RefreshDatabase::class);
 
 beforeEach(fn () => $this->withoutVite());
-
-// ── Upload page access ────────────────────────────────────────────────────
 
 it('admin can access the upload page', function () {
     $admin = User::factory()->admin()->create();
@@ -54,11 +47,9 @@ it('regular user cannot access upload page', function () {
          ->assertStatus(403);
 })->group('db');
 
-// ── Slug auto-generation on create ───────────────────────────────────────
-
 it('gif created with persian title gets a slug', function () {
-    $user  = User::factory()->admin()->create();
-    $gif   = \Modules\Gif\Models\Gif::create([
+    $user = User::factory()->admin()->create();
+    $gif  = \Modules\Gif\Models\Gif::create([
         'title'             => 'واکنش خنده‌دار',
         'file_path'         => 'gifs/test.gif',
         'file_size'         => 1000,
@@ -67,13 +58,12 @@ it('gif created with persian title gets a slug', function () {
         'uploaded_by'       => $user->id,
     ]);
 
-    // Slug must be generated (non-empty) even for non-ASCII title
     expect($gif->slug)->not->toBeEmpty();
 })->group('db');
 
 it('gif created with emoji title gets a slug', function () {
-    $user  = User::factory()->admin()->create();
-    $gif   = \Modules\Gif\Models\Gif::create([
+    $user = User::factory()->admin()->create();
+    $gif  = \Modules\Gif\Models\Gif::create([
         'title'             => '🎉 Party GIF',
         'file_path'         => 'gifs/party.gif',
         'file_size'         => 2000,

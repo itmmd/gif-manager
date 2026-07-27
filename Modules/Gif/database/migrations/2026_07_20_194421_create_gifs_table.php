@@ -11,13 +11,11 @@ return new class extends Migration
         Schema::create('gifs', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('file_path');           // gifs/{uuid}.gif on public disk
-            $table->unsignedBigInteger('file_size'); // bytes
-            $table->string('mime_type', 50);       // image/gif
-            $table->string('original_filename');   // original name for display
-            $table->foreignId('uploaded_by')
-                  ->constrained('users')
-                  ->cascadeOnDelete();
+            $table->string('file_path');
+            $table->unsignedBigInteger('file_size');
+            $table->string('mime_type', 50);
+            $table->string('original_filename');
+            $table->foreignId('uploaded_by')->constrained('users')->cascadeOnDelete();
             $table->timestamps();
         });
     }
