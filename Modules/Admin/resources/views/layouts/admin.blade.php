@@ -8,15 +8,12 @@
 
     <link rel="icon" href="{{ asset('admin-assets/images/favicon.svg') }}" type="image/svg+xml">
 
-    {{-- Google Fonts: Inter --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    {{-- Gentelella v4 CSS (vanilla ES-module build, no jQuery, no Alpine) --}}
     <link rel="stylesheet" href="{{ asset('admin-assets/css/main-v4-DDS6x4g-.css') }}">
 
-    {{-- Theme initialiser: reads localStorage before first paint to avoid flash --}}
     <script>
         (function () {
             try {
@@ -28,33 +25,22 @@
         })();
     </script>
 
-    {{-- Gentelella v4 JS modules (vanilla JS only — sidebar, theme, modals, command palette) --}}
-    {{-- NOTE: sidebar-toggle, theme-toggle and modal logic are fully owned by these scripts.  --}}
-    {{--       Do NOT add Alpine.js or jQuery equivalents here; they would create conflicts.   --}}
     <script type="module" src="{{ asset('admin-assets/js/rolldown-runtime-DEgBLETi.js') }}"></script>
     <script type="module" src="{{ asset('admin-assets/js/toast-DgCSlJPv.js') }}"></script>
     <script type="module" src="{{ asset('admin-assets/js/menus-BVcs0GJR.js') }}"></script>
     <script type="module" src="{{ asset('admin-assets/js/modal-MTuCfURV.js') }}"></script>
     <script type="module" src="{{ asset('admin-assets/js/main-v4-BFwmMcfm.js') }}"></script>
 
-    {{-- Livewire styles (injected before closing </head>) --}}
     @livewireStyles
 
-    {{-- Mobile touch-target overrides: Gentelella's tb-btn (32px) and
-         sidebar-toggle (34px) are below the 44×44 px WCAG 2.5.5 guideline.
-         We enlarge the interactive hit area on touch devices only, so the
-         visual size stays unchanged on desktop (pointer: fine). --}}
     <style>
         @media (pointer: coarse) {
-            /* Topbar icon buttons: grow hit area to 44 px without changing
-               the visible icon size. */
             .tb-btn,
             .sidebar-toggle {
                 min-width: 44px;
                 min-height: 44px;
             }
 
-            /* Avatar button in topbar */
             .tb-avatar {
                 min-width: 44px;
                 min-height: 44px;
@@ -62,14 +48,12 @@
         }
     </style>
 
-    {{-- Per-page styles slot (inject via @push / named slot from Livewire components) --}}
     {{ $styles ?? '' }}
 </head>
 <body data-shell="admin" data-page="{{ $page ?? 'dashboard' }}" data-breadcrumb="{{ $breadcrumb ?? 'Home' }}">
 
 <a class="skip-link" href="#main-content">Skip to main content</a>
 
-{{-- ═══════════════════════════════════════════════════ SIDEBAR ══ --}}
 <aside class="sidebar" aria-label="Primary navigation">
     <div class="sidebar-brand">
         <div class="brand-icon">
@@ -94,11 +78,6 @@
                 <span class="nav-text">Dashboard</span>
             </a>
 
-            {{--
-                GIF Library link — guarded with Route::has() so that if the
-                Gif module is disabled or removed, the sidebar simply hides
-                this item instead of throwing a RouteNotFoundException.
-            --}}
             @if (Route::has('admin.gifs.index'))
                 <a class="nav-link {{ request()->routeIs('admin.gifs.*') ? 'active' : '' }}"
                    href="{{ route('admin.gifs.index') }}">
@@ -132,7 +111,6 @@
             @endif
         </div>
 
-        {{-- Additional nav items injected by other modules via the $sidebar slot --}}
         {{ $sidebar ?? '' }}
     </nav>
 
@@ -157,10 +135,8 @@
     </div>
 </aside>
 
-{{-- ═══════════════════════════════════════════════════ TOPBAR ══ --}}
 <header class="topbar">
     <div class="topbar-left">
-        {{-- sidebar-toggle is wired by Gentelella main-v4.js (rail mode on desktop, drawer on mobile) --}}
         <button class="sidebar-toggle" type="button"
                 aria-label="Open menu" aria-controls="sidebar" aria-expanded="false">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
@@ -173,7 +149,6 @@
         </nav>
     </div>
 
-    {{-- Search box opens the command palette (⌘K) — handled by Gentelella main-v4.js --}}
     <div class="search-box">
         <svg class="s-icon" width="14" height="14" viewBox="0 0 16 16" fill="none"
              stroke="currentColor" stroke-width="1.5" aria-hidden="true">
@@ -186,7 +161,6 @@
     </div>
 
     <div class="topbar-right">
-        {{-- theme-toggle is wired by Gentelella main-v4.js --}}
         <button class="tb-btn theme-toggle" type="button"
                 title="Toggle theme" aria-label="Toggle theme" aria-pressed="false">
             <svg class="theme-icon-light" width="18" height="18" viewBox="0 0 24 24"
@@ -201,15 +175,6 @@
         </button>
 
         @auth
-        {{--
-            Logout: uses a hidden form + fetch to bypass Gentelella's global
-            document.addEventListener("submit") interceptor in main-v4.js,
-            which calls preventDefault() on every form submit (intended for
-            settings forms) and prevents real navigation from happening.
-
-            We submit programmatically via fetch POST, then redirect on success,
-            so the global listener never sees a native submit event.
-        --}}
         <form id="logout-form" method="POST" action="{{ route('logout') }}" style="display:none">
             @csrf
         </form>
@@ -243,20 +208,6 @@
     </div>
 </header>
 
-{{-- ══════════════════════════════════════════════════ MAIN ══ --}}
-{{-- ─────────────────────────────────────────────────────────── --}}
-{{-- LIVEWIRE INTEGRATION NOTES                                  --}}
-{{-- • The shell (sidebar, topbar, footer) is static Blade HTML. --}}
-{{-- • Dynamic, data-driven sections should be Livewire          --}}
-{{--   full-page components using #[Layout('admin::layouts.admin')] --}}
-{{-- • Currently static (future Livewire candidates):           --}}
-{{--   - sidebar nav items (module-driven menu)                  --}}
-{{--   - notification badge counts                               --}}
-{{--   - user avatar / name (already reads auth()->user())       --}}
-{{-- • Gentelella JS owns: sidebar toggle, theme, modals,        --}}
-{{--   command palette, ECharts, DataTables. Do NOT duplicate    --}}
-{{--   these with Livewire polls or Alpine.js directives.        --}}
-{{-- ─────────────────────────────────────────────────────────── --}}
 <main id="main-content" tabindex="-1" class="main">
     <div class="page-wrapper">
         {{ $slot }}
@@ -268,10 +219,8 @@
     </footer>
 </main>
 
-{{-- Livewire scripts --}}
 @livewireScripts
 
-{{-- Per-page scripts slot --}}
 {{ $scripts ?? '' }}
 
 </body>

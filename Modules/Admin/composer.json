@@ -1,20 +1,6 @@
 {
-    "name": "nwidart/admin",
-    "description": "",
-    "authors": [
-        {
-            "name": "Nicolas Widart",
-            "email": "n.widart@gmail.com"
-        }
-    ],
-    "extra": {
-        "laravel": {
-            "providers": [],
-            "aliases": {
-
-            }
-        }
-    },
+    "name": "modules/admin",
+    "description": "Admin panel module",
     "autoload": {
         "psr-4": {
             "Modules\\Admin\\": "app/",
@@ -25,6 +11,12 @@
     "autoload-dev": {
         "psr-4": {
             "Modules\\Admin\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {}
         }
     }
 }
