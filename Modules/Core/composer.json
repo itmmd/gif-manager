@@ -1,20 +1,6 @@
 {
-    "name": "nwidart/core",
-    "description": "",
-    "authors": [
-        {
-            "name": "Nicolas Widart",
-            "email": "n.widart@gmail.com"
-        }
-    ],
-    "extra": {
-        "laravel": {
-            "providers": [],
-            "aliases": {
-
-            }
-        }
-    },
+    "name": "modules/core",
+    "description": "Core shared contracts and services",
     "autoload": {
         "psr-4": {
             "Modules\\Core\\": "app/",
@@ -25,6 +11,12 @@
     "autoload-dev": {
         "psr-4": {
             "Modules\\Core\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {}
         }
     }
 }

@@ -6,13 +6,6 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Modules\Core\Contracts\MediaStorageInterface;
 
-/**
- * Local disk implementation of MediaStorageInterface.
- *
- * این کلاس پیاده‌سازی پیش‌فرض برای ذخیره‌سازی روی دیسک local است.
- * برای جایگزینی با S3 کافیه یک S3MediaStorage بسازی و binding رو
- * در CoreServiceProvider عوض کنی — بقیه کد پروژه بدون تغییر کار می‌کنه.
- */
 class LocalMediaStorage implements MediaStorageInterface
 {
     public function __construct(

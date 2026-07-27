@@ -9,9 +9,7 @@ it('ProcessMediaJob can be dispatched to the queue', function () {
 
     ProcessMediaJob::dispatch('test/file.gif');
 
-    Queue::assertPushed(ProcessMediaJob::class, function ($job) {
-        return $job->filePath === 'test/file.gif';
-    });
+    Queue::assertPushed(ProcessMediaJob::class, fn ($job) => $job->filePath === 'test/file.gif');
 });
 
 it('ProcessMediaJob has correct tries and timeout', function () {
@@ -22,7 +20,5 @@ it('ProcessMediaJob has correct tries and timeout', function () {
 });
 
 it('ProcessMediaJob implements ShouldQueue', function () {
-    $job = new ProcessMediaJob('sample.gif');
-
-    expect($job)->toBeInstanceOf(ShouldQueue::class);
+    expect(new ProcessMediaJob('sample.gif'))->toBeInstanceOf(ShouldQueue::class);
 });

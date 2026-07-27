@@ -7,7 +7,7 @@ use Livewire\Component;
 
 class Ping extends Component
 {
-    public string $message = 'Livewire 4 is working inside the Core module!';
+    public string $message = 'Livewire is working.';
 
     public int $clickCount = 0;
 
