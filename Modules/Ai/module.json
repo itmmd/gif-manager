@@ -1,7 +1,7 @@
 {
     "name": "Ai",
     "alias": "ai",
-    "description": "",
+    "description": "AI vision analysis, embeddings, and content moderation",
     "keywords": [],
     "priority": 0,
     "providers": [

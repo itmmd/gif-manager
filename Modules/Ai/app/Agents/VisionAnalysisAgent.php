@@ -8,17 +8,6 @@ use Laravel\Ai\Contracts\Agent;
 use Laravel\Ai\Contracts\HasStructuredOutput;
 use Laravel\Ai\Promptable;
 
-/**
- * Agent that analyses the first frame of a GIF/MP4 and returns structured output:
- *   - suggested_title  : short descriptive title (max 60 chars)
- *   - suggested_tags   : 3–5 relevant tags
- *   - description      : one-sentence description (max 120 chars)
- *   - is_flagged       : true when content is inappropriate for public display
- *   - flag_reason      : reason if flagged, null otherwise
- *
- * Prompt injection protection: instructions never include user-supplied content.
- * Only the image attachment (binary) is passed to the provider — no user text.
- */
 class VisionAnalysisAgent implements Agent, HasStructuredOutput
 {
     use Promptable;
@@ -37,14 +26,6 @@ Rules:
 PROMPT;
     }
 
-    /**
-     * Return the structured output schema (a single Type from the JSON Schema API).
-     *
-     * The SDK passes a JsonSchemaTypeFactory instance so all factory methods
-     * (string(), boolean(), array(), object()) are available.
-     *
-     * @return array<string, Type>  — associative map used by the SDK to build the schema
-     */
     public function schema(JsonSchema $schema): array
     {
         return [

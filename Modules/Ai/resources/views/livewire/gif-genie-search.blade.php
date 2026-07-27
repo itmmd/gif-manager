@@ -1,15 +1,12 @@
-{{-- GIF Genie — AI-powered semantic search page, landing theme --}}
 <div>
     <x-landing::navbar />
 
-    {{-- ── Hero / search bar ── --}}
     <section class="relative overflow-hidden py-20 text-center">
         <div class="pointer-events-none absolute inset-0" aria-hidden="true"
              style="background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(139,92,246,0.20), transparent 65%);">
         </div>
 
         <div class="relative z-10 mx-auto max-w-3xl px-6">
-            {{-- Genie icon --}}
             <div class="mb-5 inline-flex items-center justify-center rounded-2xl bg-violet-600/20 p-4 ring-1 ring-violet-500/30" aria-hidden="true">
                 <svg class="h-9 w-9 text-violet-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                     <path d="M12 2a5 5 0 015 5c0 5.25-5 10-5 10S7 12.25 7 7a5 5 0 015-5z"/>
@@ -25,7 +22,6 @@
                 Describe what you're looking for in plain language — AI does the rest.
             </p>
 
-            {{-- Search input --}}
             <div class="mx-auto mt-8 max-w-xl">
                 <div class="relative">
                     <svg class="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-violet-400"
@@ -43,7 +39,6 @@
                         autocomplete="off"
                         spellcheck="false"
                     >
-                    {{-- Loading spinner --}}
                     <div wire:loading wire:target="query"
                          class="absolute right-4 top-1/2 -translate-y-1/2"
                          aria-label="Searching…" role="status">
@@ -54,7 +49,6 @@
                     </div>
                 </div>
 
-                {{-- Search mode badge --}}
                 @if ($query !== '')
                     <p class="mt-3 text-xs text-slate-500" aria-live="polite">
                         @if ($usedSemanticSearch)
@@ -72,10 +66,8 @@
                     </p>
                 @endif
 
-                {{-- Link back to standard gallery --}}
                 <div class="mt-4">
-                    <a href="{{ route('gifs.index') }}"
-                       class="text-xs text-slate-500 underline decoration-dotted hover:text-slate-300">
+                    <a href="{{ route('gifs.index') }}" class="text-xs text-slate-500 underline decoration-dotted hover:text-slate-300">
                         ← Back to full gallery
                     </a>
                 </div>
@@ -83,7 +75,6 @@
         </div>
     </section>
 
-    {{-- ── Results grid ── --}}
     <section class="mx-auto max-w-7xl px-6 pb-24 lg:px-8">
 
         @if ($gifs->isEmpty())

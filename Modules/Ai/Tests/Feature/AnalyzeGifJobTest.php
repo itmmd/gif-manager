@@ -14,18 +14,9 @@ use Modules\Ai\Models\GifAiMetadata;
 use Modules\Gif\Events\GifUploaded;
 use Modules\Gif\Models\Gif;
 
-/**
- * AnalyzeGifJob & GifUploaded event — DB tests
- *
- * All AI calls are faked with Laravel AI SDK's built-in fake mechanism.
- * No real API calls are made.
- */
-
 uses(RefreshDatabase::class);
 
 beforeEach(fn () => $this->withoutVite());
-
-// ── Event dispatch ─────────────────────────────────────────────────────────
 
 it('GifUploaded event is dispatched after successful upload', function () {
     Event::fake([GifUploaded::class]);
@@ -33,7 +24,6 @@ it('GifUploaded event is dispatched after successful upload', function () {
     $admin = User::factory()->admin()->create();
     Storage::fake('public');
 
-    // Create a minimal GIF record directly (simulates what UploadGif component does)
     $gif = Gif::create([
         'title'             => 'Test GIF',
         'file_path'         => 'gifs/test.gif',
@@ -50,8 +40,6 @@ it('GifUploaded event is dispatched after successful upload', function () {
         return $event->gif->id === $gif->id;
     });
 })->group('db');
-
-// ── HandleGifUploaded Listener ─────────────────────────────────────────────
 
 it('HandleGifUploaded listener dispatches AnalyzeGifJob', function () {
     Queue::fake();
@@ -97,8 +85,6 @@ it('HandleGifUploaded listener dispatches GenerateEmbeddingJob with delay', func
     });
 })->group('db');
 
-// ── AnalyzeGifJob with fake AI ─────────────────────────────────────────────
-
 it('AnalyzeGifJob sets gif status to approved when AI reports safe content', function () {
     Storage::fake('public');
 
@@ -113,10 +99,8 @@ it('AnalyzeGifJob sets gif status to approved when AI reports safe content', fun
         'status'            => 'pending_review',
     ]);
 
-    // Create a fake GIF file so Storage::disk('public')->path() resolves
     Storage::disk('public')->put('gifs/safe.gif', 'GIF89a' . str_repeat("\x00", 100));
 
-    // Fake the VisionAnalysisService
     $fakeResult = new \Modules\Core\Contracts\MediaAnalysisResult(
         suggestedTitle: 'A Safe GIF',
         suggestedTags: ['funny', 'cat', 'happy'],
@@ -140,8 +124,6 @@ it('AnalyzeGifJob sets gif status to approved when AI reports safe content', fun
     expect($metadata->suggested_title)->toBe('A Safe GIF');
     expect($metadata->suggested_tags)->toBe(['funny', 'cat', 'happy']);
 })->group('db');
-
-it('AnalyzeGifJob sets gif status to flagged when AI detects inappropriate content', function () {
     Storage::fake('public');
 
     $admin = User::factory()->admin()->create();

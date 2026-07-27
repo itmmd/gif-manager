@@ -2,6 +2,8 @@
 
 namespace Modules\Ai\Http\Livewire;
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
@@ -9,24 +11,14 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use Modules\Gif\Models\Gif;
 
-/**
- * Admin page for reviewing GIFs flagged by AI content moderation.
- *
- * Shows all GIFs with status = 'flagged' or 'pending_review'.
- * Admin can:
- *   - Approve: set status to 'approved' (GIF becomes publicly visible)
- *   - Reject:  delete the GIF from disk and database
- */
 #[Layout('admin::layouts.admin')]
 #[Title('Content Moderation')]
 class ModerationQueue extends Component
 {
     use WithPagination;
 
-    /** Filter: 'flagged' | 'pending_review' | 'all' */
     public string $filter = 'flagged';
 
-    /** ID pending confirmation for rejection (delete) */
     public ?int $confirmRejectId = null;
 
     public function setFilter(string $filter): void
@@ -39,14 +31,14 @@ class ModerationQueue extends Component
     public function approve(int $id): void
     {
         $gif = Gif::find($id);
+
         if (! $gif) {
             return;
         }
 
         $gif->update(['status' => 'approved']);
 
-        // Update AI metadata moderation status to match
-        \DB::table('gif_ai_metadata')
+        DB::table('gif_ai_metadata')
             ->where('gif_id', $id)
             ->update(['moderation_status' => 'approved']);
     }
@@ -64,6 +56,7 @@ class ModerationQueue extends Component
     public function reject(int $id): void
     {
         $gif = Gif::find($id);
+
         if (! $gif) {
             $this->confirmRejectId = null;
             return;
@@ -88,7 +81,7 @@ class ModerationQueue extends Component
         ]);
     }
 
-    private function buildQuery(): \Illuminate\Database\Eloquent\Builder
+    private function buildQuery(): Builder
     {
         return match ($this->filter) {
             'pending_review' => Gif::pendingReview(),
